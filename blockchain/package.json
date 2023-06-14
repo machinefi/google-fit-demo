@@ -1,0 +1,23 @@
+{
+  "name": "hardhat-project",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test --typecheck",
+    "deploy": "hardhat deploy",
+    "deploy:testnet": "hardhat deploy --network testnet --export-all ../adapter/features/web3/contracts/deployments.json",
+    "deploy:mainnet": "hardhat deploy --network mainnet --export-all ../adapter/features/web3/contracts/deployments.json"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^2.0.1",
+    "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers",
+    "@openzeppelin/contracts": "^4.8.1",
+    "@types/chai": "^4.3.5",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^20.2.3",
+    "chai": "^4.3.7",
+    "dotenv": "^16.0.3",
+    "hardhat-deploy": "^0.11.28",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  }
+}

@@ -1,0 +1,43 @@
+# dependencies
+node_modules
+/.pnp
+.pnp.js
+
+# env files
+.env*.local
+.env
+
+.vscode
+
+# blockchain
+artifacts
+cache
+typechain-types
+deployments
+
+# testing
+/coverage
+
+# next.js
+adapter/.next/
+/out/
+
+# production
+applet/build
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
