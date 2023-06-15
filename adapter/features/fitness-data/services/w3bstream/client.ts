@@ -1,7 +1,7 @@
 import "server-only";
 
 import { HTTP_ROUTE, DEVICE_TOKEN } from "@/app/config";
-import { SleepData } from "@/app/types";
+import { FitSession } from "@/app/types";
 
 const myHeaders = new Headers();
 myHeaders.append("Content-Type", "application/json");
@@ -12,25 +12,31 @@ const requestOptions: any = {
   headers: myHeaders,
 };
 
-export async function uploadSleepDataToWS(deviceId: string, data: SleepData[]) {
+const FIT_DATA_EVENT_TYPE = "FIT_DATA";
+const ANALYZE_FIT_DATA_EVENT_TYPE = "ANALYZE_FIT_DATA";
+
+export async function uploadFitSessionToWS(
+  deviceId: string,
+  data: FitSession[]
+) {
   if (data.length === 0) {
     return;
   }
 
   requestOptions.body = JSON.stringify({
-    deviceId: `0x${deviceId}`,
-    data: data,
+    deviceId,
+    data,
   });
 
   await sendRequest(
-    HTTP_ROUTE.trim() + "?eventType=SLEEP_DATA",
+    HTTP_ROUTE.trim() + `?eventType=${FIT_DATA_EVENT_TYPE}`,
     requestOptions
   );
 }
 
 export async function triggerEvaluation() {
   await sendRequest(
-    HTTP_ROUTE.trim() + "?eventType=ANALYZE_SLEEP",
+    HTTP_ROUTE.trim() + `?eventType=${ANALYZE_FIT_DATA_EVENT_TYPE}`,
     requestOptions
   );
 }
