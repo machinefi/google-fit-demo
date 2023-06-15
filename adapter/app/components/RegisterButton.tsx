@@ -4,21 +4,22 @@ import { useState } from "react";
 import { useAccount } from "wagmi";
 import axios from "axios";
 
-import useStore from "@/store";
+import { useSession } from "next-auth/react";
 
 export const RegisterButton = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
-  const { ouraToken } = useStore((state) => state);
   const { address: ownerAddr, isDisconnected } = useAccount();
+
+  const { data: session } = useSession();
 
   const handleClick = async () => {
     setLoading(true);
     try {
       const res = await axios.post("/api/register", {
-        ouraToken,
+        ownerEmail: session?.user?.email,
         ownerAddr,
       });
       const { emailHashed } = res.data;
@@ -54,19 +55,13 @@ export const RegisterButton = () => {
             Go to Dashboard
           </button>
         </a>
-        <button
-          onClick={() => setSuccess(false)}
-          className="bg-transparent hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Register Another
-        </button>
       </div>
     );
   }
 
   return (
     <button
-      disabled={isDisconnected || loading || success}
+      disabled={isDisconnected || loading || success || !session?.user?.email}
       onClick={handleClick}
       className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:bg-gray-700 disabled:text-gray-400 disabled:cursor-not-allowed"
     >
