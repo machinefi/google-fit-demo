@@ -1,84 +1,84 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
 
-import {
-  loadAll as loadAllDevices,
-  load,
-  loadDate,
-} from "@/features/secrets/services/redis/load";
-
-import { EncryptedToken } from "@/features/secrets/types/EncryptedToken";
-import { decrypt } from "@/features/secrets/utils/encryption";
-import { fetchSleepData } from "@/features/sleep-data/services/oura/get-sleep";
-import { uploadSleepDataToWS } from "@/features/sleep-data/services/w3bstream/client";
-import { SleepData, SleepDataRaw } from "@/app/types";
+import { loadDate } from "@/features/secrets/services/redis/load";
 import { storeString } from "@/features/secrets/services/redis/store";
+import { fetchFitSessions } from "@/features/fitness-data/services/google/get-fit-session";
+import { FitSession, FitSessionRaw } from "@/app/types";
+import { uploadFitSessionToWS } from "@/features/fitness-data/services/w3bstream/client";
+
+const YOGA_ACTIVITY_TYPE = 100;
+const NEXT_FETCH_TIME_KEY = "gfitStart";
+const DEFAULT_FETCH_DAYS = 7;
+const DEFAULT_TIME_INCREMENT_MS = 1;
 
 export async function POST(req: NextRequest) {
-  try {
-    const ids = await fetchDeviceIds();
-    await Promise.all(ids.map((id) => processDevice(id)));
-    return NextResponse.json({ success: true, ids });
-  } catch (error: any) {
-    console.log(error);
-    return NextResponse.json({ error: "Unknown error" }, { status: 500 });
+  const { deviceId } = await req.json();
+  const token = await getToken({ req });
+  if (!token || !token.accessToken) {
+    return NextResponse.json({ error: "Not authorized" }, { status: 401 });
   }
-}
 
-async function fetchDeviceIds(): Promise<string[]> {
-  const tokens = await loadAllDevices("token");
-  return tokens.map((t) => t.split(":")[1]);
-}
-
-async function processDevice(deviceId: string) {
   try {
-    const token = await getToken(deviceId);
-    const lastFetchDate = await getLastFetchDate(deviceId);
-    const rawData = await fetchSleepData(token, lastFetchDate || undefined);
-    const processedData = processData(rawData);
-    await uploadSleepDataToWS(deviceId, processedData);
-    await updateLastFetchDate(deviceId, rawData);
-  } catch (error) {
-    console.log(error);
+    await processDevice(token.accessToken as string, deviceId);
+  } catch (e: any) {
+    console.log(e);
+    return NextResponse.json(
+      { error: e.response.data.error || e.message || "Unknown error" },
+      { status: e.response.status || 500 }
+    );
   }
+  return NextResponse.json({ success: true });
 }
 
-async function getToken(deviceId: string): Promise<string> {
-  const encryptedToken = await load("token:" + deviceId);
-  const decryptedToken = decrypt(encryptedToken as unknown as EncryptedToken);
-  return decryptedToken;
+async function processDevice(accessToken: string, deviceId: string) {
+  const lastFetchDate = await getLastFetchDate(deviceId);
+  const rawData = await fetchFitSessions(
+    accessToken,
+    lastFetchDate,
+    YOGA_ACTIVITY_TYPE
+  );
+
+  const processedData = processData(rawData);
+  await uploadFitSessionToWS(deviceId, processedData);
+  await updateLastFetchDate(deviceId, rawData);
 }
 
 async function getLastFetchDate(deviceId: string): Promise<string> {
-  const date = await loadDate<string | null>("sleep:" + deviceId);
+  const _deviceId = deviceId.replace("0x", "");
+  const date = await loadDate<string | null>(NEXT_FETCH_TIME_KEY + _deviceId);
   if (date === null) {
     const today = new Date();
-    today.setDate(today.getDate() - 7); // 7 days ago
-    return today.toISOString().split("T")[0];
+    today.setDate(today.getDate() - DEFAULT_FETCH_DAYS); // 7 days ago
+    return today.toISOString();
   }
 
   return date;
 }
 
-function processData(data: SleepDataRaw[]): SleepData[] {
-  const validDataPoints = data.filter((d: SleepDataRaw) => {
-    return d.score !== undefined && d.timestamp !== undefined;
+function processData(data: FitSessionRaw[]): FitSession[] {
+  const validDataPoints = data.filter((d: FitSessionRaw) => {
+    return !!d.startTimeMillis && !!d.endTimeMillis;
   });
-  return validDataPoints.map((d: SleepDataRaw) => {
+  return validDataPoints.map((d: FitSessionRaw) => {
+    const { id, startTimeMillis, endTimeMillis } = d;
     return {
-      id: d.id,
-      score: d.score,
-      timestamp: d.timestamp,
+      id,
+      startTimeMillis,
+      endTimeMillis,
     };
   });
 }
 
-async function updateLastFetchDate(deviceId: string, data: SleepDataRaw[]) {
+async function updateLastFetchDate(deviceId: string, data: FitSessionRaw[]) {
+  const _deviceId = deviceId.replace("0x", "");
   if (data.length === 0) {
     return;
   }
-  const lastDay = data[data.length - 1].day;
-  const incrementedDay = new Date(lastDay);
-  incrementedDay.setDate(incrementedDay.getDate() + 1);
-  const lastDayPlusOne = incrementedDay.toISOString().split("T")[0];
-  await storeString("sleep:" + deviceId, lastDayPlusOne);
+  const startTimestamps = data.map((d) => Number(d.startTimeMillis));
+  const lastTimestamp = Math.max(...startTimestamps);
+  const incrementedTs = lastTimestamp + DEFAULT_TIME_INCREMENT_MS;
+  const nextStartTime = new Date(incrementedTs).toISOString();
+
+  await storeString(NEXT_FETCH_TIME_KEY + _deviceId, nextStartTime);
 }
