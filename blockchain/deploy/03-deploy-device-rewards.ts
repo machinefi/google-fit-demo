@@ -1,5 +1,6 @@
 import { DeployFunction } from "hardhat-deploy/types";
 import { addEnvVarToWSProjectConfig } from "../utils/update-envs";
+import { REWARDS_CONTRACT_NAME, REWARDS_URI } from "../constants";
 
 const func: DeployFunction = async ({
   getNamedAccounts,
@@ -10,17 +11,17 @@ const func: DeployFunction = async ({
   const chainId = await getChainId();
   const { deployer } = await getNamedAccounts();
 
-  const tx = await deploy("Sleepr", {
+  const tx = await deploy("DeviceRewards", {
     from: deployer,
-    args: [process.env.SLEEPR_URI || ""],
+    args: [REWARDS_URI, REWARDS_CONTRACT_NAME],
     log: true,
   });
 
-  console.log("Ring deployed at block: ", tx.receipt?.blockNumber);
+  console.log("DeviceRewards deployed at block: ", tx.receipt?.blockNumber);
 
   if (chainId !== "31337") {
     addEnvVarToWSProjectConfig({
-      envName: "SLEEPR_CONTRACT_ADDRESS",
+      envName: "REWARDS_CONTRACT_ADDRESS",
       envValue: tx.address,
     });
     addEnvVarToWSProjectConfig({
@@ -31,4 +32,4 @@ const func: DeployFunction = async ({
 };
 
 export default func;
-func.tags = ["Sleepr"];
+func.tags = ["DeviceRewards"];

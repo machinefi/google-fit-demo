@@ -5,13 +5,16 @@ import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
 
-contract Sleepr is ERC1155, AccessControl, ERC1155Supply {
+contract DeviceRewards is ERC1155, AccessControl, ERC1155Supply {
     bytes32 public constant URI_SETTER_ROLE = keccak256("URI_SETTER_ROLE");
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
     mapping(uint256 => mapping(address => uint256)) public allowance;
 
-    constructor(string memory newuri) ERC1155(newuri) {
+    string public name;
+
+    constructor(string memory newuri, string memory _name) ERC1155(newuri) {
+        name = _name;
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(URI_SETTER_ROLE, msg.sender);
         _grantRole(MINTER_ROLE, msg.sender);
