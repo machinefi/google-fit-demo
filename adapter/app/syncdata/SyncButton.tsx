@@ -1,5 +1,6 @@
 "use client";
 
+import { useDeviceIds } from "@/hooks/useDeviceIds";
 import axios from "axios";
 import { useState } from "react";
 
@@ -7,12 +8,12 @@ export const SyncButton = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const devices = useDeviceIds();
 
   const handleClick = async () => {
     setLoading(true);
     try {
-      await axios.post("/api/pull-data");
-      await axios.post("/api/evaluate");
+      await axios.post("/api/pull-data", { deviceId: devices[0] });
       setSuccess(true);
     } catch (e: any) {
       console.log(e);
@@ -21,6 +22,19 @@ export const SyncButton = () => {
       setLoading(false);
     }
   };
+
+  if (!devices.length) {
+    return (
+      <div className="flex flex-col items-center justify-center gap-4">
+        <p className="text-red-500">No rings registered yet.</p>
+        <a href="/register">
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Register device
+          </button>
+        </a>
+      </div>
+    );
+  }
 
   if (error) {
     return (

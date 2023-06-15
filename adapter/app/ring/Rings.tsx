@@ -1,34 +1,26 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
 import Wallet from "../components/Wallet";
 import { ClaimSBTButton } from "./ClaimSBTButton";
+import { useDeviceIds } from "@/hooks/useDeviceIds";
 
 export default function Rings() {
-  const [rings, setRings] = useState<string[]>([]);
+  const devices = useDeviceIds();
 
-  useEffect(() => {
-    const rings = localStorage.getItem("devices");
-    if (rings) {
-      setRings(JSON.parse(rings));
-    }
-  }, []);
-
-  if (!rings.length) {
+  if (!devices.length) {
     return <EmptyRingList />;
   }
 
   return (
     <div className="flex flex-col items-center justify-center gap-4">
-      {rings.map((ring) => (
+      {devices.map((device) => (
         <div
-          key={ring}
+          key={device}
           className="flex flex-col text-center items-center justify-center gap-4"
         >
-          <p className="text-white">{ring}</p>
+          <p className="text-white">{device}</p>
           <Wallet>
-            <ClaimSBTButton ringId={ring} />
+            <ClaimSBTButton ringId={device} />
           </Wallet>
         </div>
       ))}
