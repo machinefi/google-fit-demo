@@ -1,6 +1,6 @@
 import { task } from "hardhat/config";
 
-task("grant-sbt-minter", "Grant ring minter role to an address").setAction(
+task("grant-sbt-minter", "Grant sbt minter role to an address").setAction(
   async (_, hre) => {
     const { deployments } = hre;
     const [deployer] = await hre.ethers.getSigners();
@@ -20,7 +20,7 @@ task("grant-sbt-minter", "Grant ring minter role to an address").setAction(
   }
 );
 
-task("check-sbt-balance", "Check ring balance of an address")
+task("check-sbt-balance", "Check sbt balance of an address")
   .addParam("address", "Address to check")
   .setAction(async (taskArgs, hre) => {
     const { address } = taskArgs;
