@@ -1,4 +1,4 @@
 import "./welcome";
 import "./binding";
-import "./ring";
+import "./sbt";
 import "./sleepr";

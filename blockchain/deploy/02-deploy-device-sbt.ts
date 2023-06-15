@@ -1,4 +1,5 @@
-import { addEnvVarToWSProjectConfig } from "./../utils/update-envs";
+import { SBT_CONTRACT_NAME, SBT_CONTRACT_SYMBOL, SBT_URI } from "../constants";
+import { addEnvVarToWSProjectConfig } from "../utils/update-envs";
 import { DeployFunction } from "hardhat-deploy/types";
 
 const func: DeployFunction = async ({
@@ -10,17 +11,17 @@ const func: DeployFunction = async ({
   const chainId = await getChainId();
   const { deployer } = await getNamedAccounts();
 
-  const tx = await deploy("Ring", {
+  const tx = await deploy("DeviceSBT", {
     from: deployer,
-    args: [process.env.RING_URI || ""],
+    args: [SBT_URI, SBT_CONTRACT_NAME, SBT_CONTRACT_SYMBOL],
     log: true,
   });
 
-  console.log("Ring deployed at block: ", tx.receipt?.blockNumber);
+  console.log("DeviceSBT deployed at block: ", tx.receipt?.blockNumber);
 
-  if (chainId) {
+  if (chainId !== "31337") {
     addEnvVarToWSProjectConfig({
-      envName: "RING_CONTRACT_ADDRESS",
+      envName: "SBT_CONTRACT_ADDRESS",
       envValue: tx.address,
     });
     addEnvVarToWSProjectConfig({
@@ -31,4 +32,4 @@ const func: DeployFunction = async ({
 };
 
 export default func;
-func.tags = ["Ring"];
+func.tags = ["DeviceSBT"];

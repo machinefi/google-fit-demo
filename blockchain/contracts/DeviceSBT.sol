@@ -4,13 +4,17 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
-contract Ring is ERC721, AccessControl {
+contract DeviceSBT is ERC721, AccessControl {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     string private _ringUri = "";
 
-    mapping(uint256 => address) public ringApprovals;
+    mapping(uint256 => address) public sbtApprovals;
 
-    constructor(string memory uri_) ERC721("Ring", "RING") {
+    constructor(
+        string memory uri_,
+        string memory _name,
+        string memory _symbol
+    ) ERC721(_name, _symbol) {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(MINTER_ROLE, msg.sender);
         _ringUri = uri_;
@@ -27,15 +31,15 @@ contract Ring is ERC721, AccessControl {
         return _ringUri;
     }
 
-    function approveRing(
+    function approveSBT(
         address to,
         uint256 tokenId
     ) public onlyRole(MINTER_ROLE) {
-        ringApprovals[tokenId] = to;
+        sbtApprovals[tokenId] = to;
     }
 
-    function mintRing(uint256 tokenId) public {
-        address to = ringApprovals[tokenId];
+    function mintSBT(uint256 tokenId) public {
+        address to = sbtApprovals[tokenId];
         _safeMint(to, tokenId);
     }
 
@@ -52,7 +56,7 @@ contract Ring is ERC721, AccessControl {
         uint256 tokenId,
         uint256 batchSize
     ) internal override(ERC721) {
-        require(from == address(0), "Ring: Only minting allowed");
+        require(from == address(0), "DeviceSBT: Only minting allowed");
         super._beforeTokenTransfer(from, to, tokenId, batchSize);
     }
 
