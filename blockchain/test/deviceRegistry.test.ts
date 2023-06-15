@@ -1,14 +1,14 @@
 import { ethers } from "hardhat";
 import { expect } from "chai";
-import { DevicesRegistry } from "../typechain-types";
+import { DeviceRegistry } from "../typechain-types";
 
 async function setup() {
-  const devicesRegistry = await ethers.getContractFactory("DevicesRegistry");
-  const devicesRegistryInstance = await devicesRegistry.deploy();
-  await devicesRegistryInstance.deployed();
+  const deviceRegistry = await ethers.getContractFactory("DeviceRegistry");
+  const deviceRegistryInstance = await deviceRegistry.deploy();
+  await deviceRegistryInstance.deployed();
 
   const contracts = {
-    DevicesRegistry: devicesRegistryInstance as DevicesRegistry,
+    DeviceRegistry: deviceRegistryInstance as DeviceRegistry,
   };
 
   return {
@@ -18,8 +18,8 @@ async function setup() {
 
 describe("Device Registry", function () {
   it("Should deploy Device Registry", async function () {
-    const { DevicesRegistry } = await setup();
+    const { DeviceRegistry } = await setup();
 
-    expect(DevicesRegistry.address).to.not.equal(0);
+    expect(DeviceRegistry.address).to.not.equal(0);
   });
 });

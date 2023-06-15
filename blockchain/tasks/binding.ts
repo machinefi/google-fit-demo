@@ -7,10 +7,10 @@ task("register-device", "Register a device")
     const { deployments } = hre;
     const [deployer] = await hre.ethers.getSigners();
 
-    const DevicesRegistry = await deployments.get("DevicesRegistry");
+    const DeviceRegistry = await deployments.get("DeviceRegistry");
     const deviceRegistry = await hre.ethers.getContractAt(
-      "DevicesRegistry",
-      DevicesRegistry.address,
+      "DeviceRegistry",
+      DeviceRegistry.address,
       deployer
     );
 

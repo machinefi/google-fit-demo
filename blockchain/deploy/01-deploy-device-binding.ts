@@ -10,11 +10,11 @@ const func: DeployFunction = async ({
   const { deploy } = deployments;
   const chainId = await getChainId();
   const { deployer } = await getNamedAccounts();
-  const DevicesRegistry = await deployments.get("DevicesRegistry");
+  const DeviceRegistry = await deployments.get("DeviceRegistry");
 
   const tx = await deploy("DeviceBinding", {
     from: deployer,
-    args: [DevicesRegistry.address],
+    args: [DeviceRegistry.address],
     log: true,
   });
 

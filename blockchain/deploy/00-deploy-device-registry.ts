@@ -10,12 +10,12 @@ const func: DeployFunction = async ({
   const { deploy } = deployments;
   const chainId = await getChainId();
   const { deployer } = await getNamedAccounts();
-  const tx = await deploy("DevicesRegistry", {
+  const tx = await deploy("DeviceRegistry", {
     from: deployer,
     args: [],
     log: true,
   });
-  console.log("DevicesRegistry deployed at block: ", tx.receipt?.blockNumber);
+  console.log("DeviceRegistry deployed at block: ", tx.receipt?.blockNumber);
 
   if (chainId !== "31337") {
     updateContractMonitor({
@@ -35,4 +35,4 @@ const func: DeployFunction = async ({
 };
 
 export default func;
-func.tags = ["DevicesRegistry"];
+func.tags = ["DeviceRegistry"];

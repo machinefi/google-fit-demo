@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract DevicesRegistry is Ownable {
+contract DeviceRegistry is Ownable {
     event DeviceRegistered(bytes32 indexed _deviceId);
     event DeviceDeleted(bytes32 indexed _deviceId);
     event DeviceSuspended(bytes32 indexed _deviceId);
