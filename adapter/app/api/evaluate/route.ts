@@ -9,7 +9,7 @@ export async function POST() {
   } catch (e: any) {
     return NextResponse.json(
       { error: e.response.data.error || e.message || "Unknown error" },
-      { status: 500 }
+      { status: e.response.status || 500 }
     );
   }
 }
