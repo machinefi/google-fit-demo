@@ -1,13 +1,15 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-import { triggerEvaluation } from "@/features/sleep-data/services/w3bstream/client";
+import { triggerEvaluation } from "@/features/fitness-data/services/w3bstream/client";
 
-export async function POST(req: NextRequest) {
+export async function POST() {
   try {
     await triggerEvaluation();
     return NextResponse.json({ success: true });
-  } catch (error: any) {
-    console.log(error);
-    return NextResponse.json({ error: "Unknown error" }, { status: 500 });
+  } catch (e: any) {
+    return NextResponse.json(
+      { error: e.response.data.error || e.message || "Unknown error" },
+      { status: 500 }
+    );
   }
 }
