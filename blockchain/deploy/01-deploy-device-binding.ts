@@ -20,7 +20,7 @@ const func: DeployFunction = async ({
 
   console.log("DeviceBinding deployed at block: ", tx.receipt?.blockNumber);
 
-  if (chainId) {
+  if (chainId !== "31337") {
     updateContractMonitor({
       eventType: "ON_DEVICE_BOUND",
       chainID: Number(chainId),

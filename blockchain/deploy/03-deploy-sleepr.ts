@@ -18,7 +18,7 @@ const func: DeployFunction = async ({
 
   console.log("Ring deployed at block: ", tx.receipt?.blockNumber);
 
-  if (chainId) {
+  if (chainId !== "31337") {
     addEnvVarToWSProjectConfig({
       envName: "SLEEPR_CONTRACT_ADDRESS",
       envValue: tx.address,

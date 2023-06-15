@@ -17,7 +17,7 @@ const func: DeployFunction = async ({
   });
   console.log("DevicesRegistry deployed at block: ", tx.receipt?.blockNumber);
 
-  if (chainId) {
+  if (chainId !== "31337") {
     updateContractMonitor({
       eventType: "ON_DEVICE_REGISTERED",
       chainID: Number(chainId),
