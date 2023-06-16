@@ -71,8 +71,8 @@ Follow the steps below to set up and run the project.
 ### Step 4: Blockchain Environment Adjustment
 
 - Return to the `blockchain` directory and update the `OPERATOR_ADDRESS` in your `.env` file.
-- Run `npx hardhat grant-ring-minter --network testnet` to assign the Ring minter role to the W3bstream operator.
-- Run `npx hardhat grant-sleepr-minter --network testnet` to assign the Sleepr minter role to the W3bstream operator.
+- Run `npx hardhat grant-sbt-minter --network testnet` to assign the SBT minter role to the W3bstream operator.
+- Run `npx hardhat grant-rewards-minter --network testnet` to assign the Rewards NFT minter role to the W3bstream operator.
 
 ### Step 5: Adapter Configuration
 
