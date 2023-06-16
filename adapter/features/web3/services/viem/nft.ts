@@ -1,14 +1,14 @@
 import * as deployments from "../../contracts/deployments.json";
 
-const ringConfig = (deployments as any)[4690][0].contracts.Ring;
-const sleeprConfig = (deployments as any)[4690][0].contracts.Sleepr;
+const sbtConfig = (deployments as any)[4690][0].contracts.DeviceSBT;
+const rewardsConfig = (deployments as any)[4690][0].contracts.DeviceRewards;
 
-export const ringContract = {
-  address: ringConfig.address as `0x${string}`,
-  abi: ringConfig.abi,
+export const sbtContract = {
+  address: sbtConfig.address as `0x${string}`,
+  abi: sbtConfig.abi,
 };
 
-export const sleeprContract = {
-  address: sleeprConfig.address as `0x${string}`,
-  abi: sleeprConfig.abi,
+export const rewardsContract = {
+  address: rewardsConfig.address as `0x${string}`,
+  abi: rewardsConfig.abi,
 };

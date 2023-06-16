@@ -6,12 +6,12 @@ import {
   useWaitForTransaction,
 } from "wagmi";
 
-import { sleeprContract } from "@/features/web3/services/viem/nft";
+import { rewardsContract } from "@/features/web3/services/viem/nft";
 
 export const CollectButton = ({ tier }: { tier: number }) => {
   const { config } = usePrepareContractWrite({
-    address: sleeprContract.address,
-    abi: sleeprContract.abi,
+    address: rewardsContract.address,
+    abi: rewardsContract.abi,
     functionName: "mintFromAllowance",
     args: [tier, []],
   });

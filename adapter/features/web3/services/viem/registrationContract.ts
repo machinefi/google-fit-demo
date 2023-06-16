@@ -5,7 +5,7 @@ import { getContract } from "viem";
 import * as deployments from "../../contracts/deployments.json";
 import { walletClient, publicClient } from "./client";
 
-const registryConfig = (deployments as any)[4690][0].contracts.DevicesRegistry;
+const registryConfig = (deployments as any)[4690][0].contracts.DeviceRegistry;
 
 export const registryContract = getContract({
   address: registryConfig.address as `0x${string}`,

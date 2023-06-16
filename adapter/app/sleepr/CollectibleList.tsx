@@ -2,7 +2,7 @@
 
 import { useAccount, useContractReads } from "wagmi";
 
-import { sleeprContract } from "@/features/web3/services/viem/nft";
+import { rewardsContract } from "@/features/web3/services/viem/nft";
 import { CollectButton } from "./CollectButton";
 
 export const CollectibleList = () => {
@@ -10,22 +10,10 @@ export const CollectibleList = () => {
   const { data, isLoading } = useContractReads({
     contracts: [
       {
-        address: sleeprContract.address,
-        abi: sleeprContract.abi as any,
+        address: rewardsContract.address,
+        abi: rewardsContract.abi as any,
         functionName: "allowance",
         args: [1, address ?? ""],
-      },
-      {
-        address: sleeprContract.address,
-        abi: sleeprContract.abi as any,
-        functionName: "allowance",
-        args: [2, address ?? ""],
-      },
-      {
-        address: sleeprContract.address,
-        abi: sleeprContract.abi as any,
-        functionName: "allowance",
-        args: [3, address ?? ""],
       },
     ],
     watch: true,
@@ -54,4 +42,4 @@ export const CollectibleList = () => {
 
 export default CollectibleList;
 
-const tierNames = ["Silver", "Gold", "Platinum"];
+const tierNames = ["Yoga mat"];
