@@ -2,15 +2,15 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-12 p-24">
       <div className="flex flex-col items-center justify-center">
-        <h1 className="text-4xl font-bold">Oura Demo</h1>
+        <h1 className="text-4xl font-bold">Google Fit Demo</h1>
         <p className="text-xl mt-4">
           This is a demo of the{" "}
           <a
             className="text-blue-500 hover:underline"
             target="_blank"
-            href="https://ouraring.com"
+            href="https://www.google.com/fit/"
           >
-            Oura Ring
+            Google Fit
           </a>{" "}
           integration with{" "}
           <a

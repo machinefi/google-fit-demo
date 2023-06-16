@@ -26,7 +26,7 @@ export const SyncButton = () => {
   if (!devices.length) {
     return (
       <div className="flex flex-col items-center justify-center gap-4">
-        <p className="text-red-500">No rings registered yet.</p>
+        <p className="text-red-500">No devices registered yet.</p>
         <a href="/register">
           <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
             Register device
