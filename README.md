@@ -78,11 +78,11 @@ Follow the steps below to set up and run the project.
 
 - Create a new file named `.env.local` and populate it with the variables from `.env.template`.
 - Navigate to Devices in the studio interface to find the device token and update `DEVICE_TOKEN`.
-- `ENCRYPT_KEY` can be aquired in [Vercel secret generator](https://generate-secret.vercel.app/32)
+- `NEXTAUTH_SECRET` can be aquired in [Vercel secret generator](https://generate-secret.vercel.app/32)
 - Find the `HTTP_ROUTE` under Events.
 - Start the client by running `npm run dev` and navigate to localhost:3000 in your web browser.
-- Follow the on-screen instructions to register your device, check encrypted token in the Redis db Data Browser, and claim your SBT.
-- Sync the Oura data and then recheck the studio db and proceed to claim your rewards.
+- Follow the on-screen instructions to register your device and claim your SBT.
+- Sync the Google Fit data and then recheck the studio db and proceed to claim your rewards.
 - Import the NFTs into Metamask.
 
 Congratulations, you have successfully set up and run your project!
