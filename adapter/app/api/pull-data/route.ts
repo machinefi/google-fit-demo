@@ -24,8 +24,8 @@ export async function POST(req: NextRequest) {
   } catch (e: any) {
     console.log(e);
     return NextResponse.json(
-      { error: e.response.data.error || e.message || "Unknown error" },
-      { status: e.response.status || 500 }
+      { error: e.response?.data?.error || e.message || "Unknown error" },
+      { status: e.response?.status || 500 }
     );
   }
   return NextResponse.json({ success: true });
