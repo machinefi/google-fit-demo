@@ -44,20 +44,15 @@ Follow the steps below to set up and run the project.
 
 ### Step 1: Repository Cloning and Dependency Installation
 
-- Begin by clicking "use this template" which houses three directories: `adapter`, `applet`, and `blockchain`.
+- Begin by clicking "use this template" which houses three directories: `adapter`, `applet` and `blockchain`.
 - Install the necessary dependencies in each directory by running `npm i`.
 
 ### Step 2: Blockchain Environment Preparation
 
 - In the `blockchain` directory, create a `.env` file. Populate this file with the contents of `.env.template`.
 - Provide your `PRIVATE_KEY` that will be responsible for contract deployment and access control tasks.
-- Update the `RING_URI` and `SLEEPR_URI` variables in the `.env` file as per your setup (see [NFT URI](#nft-uri)):
-
-  ```env
-  RING_URI=https://arweave.net/PKj_xuWomLBPF9VhsK5R79niHyOifF-5hlj3R8QOQCo
-  SLEEPR_URI=https://arweave.net/B5lWpjakdcVtyHNHhXwvc1RBEgENfD_8YA7ANKofwSw/{id}.json
-  ```
-
+- Update the `SBT_URI` and `REWARDS_URI` variables in the `.env` file as per your setup (see [NFT URI](#nft-uri)).
+- _Opitional: update contract names `SBT_CONTRACT_NAME` and `REWARDS_CONTRACT_NAME`_
 - The `OPERATOR_ADDRESS` will be acquired in the subsequent step.
 - Compile the contracts and generate contract types by running `npm run compile`.
 - Ensure everything is working by running `npm run test`.
