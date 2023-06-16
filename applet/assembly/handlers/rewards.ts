@@ -8,92 +8,70 @@ import {
   buildTxString,
 } from "../utils/build-tx";
 
-const DEVICE_REGISTRY_TABLE = "devices_registry";
-const SCORES_TABLE = "sleep_scores";
+const DEVICE_REGISTRY_TABLE = "device_registry";
+const SESSIONS_TABLE = "training_sessions";
 const DEVICE_BINDING_TABLE = "device_binding";
 
-const EVALUATION_PERIOD_DAYS = 7;
+const EVALUATION_PERIOD_DAYS = 1;
+const SESSION_DURATION_MILLIS = 1000 * 60 * 30; // 30 minutes
 
 const APPROVE_FUNCTION_ADDR = "426a8493";
 
 export function handle_evaluate_sleep(rid: i32): i32 {
-  const averagesByDevice = getAverages();
-  processAverages(averagesByDevice);
+  const sessionCounts = getSessionsCount();
+  processCounts(sessionCounts);
   return 0;
 }
 
-function getAverages(): JSON.Value[] {
-  const queryRes = queryWeeklyAverages();
-  const averages = parseWeeklyAverages(queryRes);
-  return averages;
+function getSessionsCount(): JSON.Value[] {
+  const queryRes = querySessionCounts();
+  const counts = parseSessionCounts(queryRes);
+  return counts;
 }
 
-function queryWeeklyAverages(): string {
+function querySessionCounts(): string {
   const sql = `
-    SELECT device_id, AVG(score_value) as average_score
-    FROM ${SCORES_TABLE}
-    WHERE timestamp >= NOW() - INTERVAL '${EVALUATION_PERIOD_DAYS} days'
+    SELECT device_id, COUNT(*) as sessions_count
+    FROM ${SESSIONS_TABLE}
+    WHERE (end_time_millis - start_time_millis) > ${SESSION_DURATION_MILLIS}
+    AND start_time_millis > NOW() - INTERVAL '${EVALUATION_PERIOD_DAYS} days'
     GROUP BY device_id;
   `;
-
   return QuerySQL(sql);
 }
 
-function parseWeeklyAverages(result: string): JSON.Value[] {
-  const averagesRaw = JSON.parse(result);
+function parseSessionCounts(result: string): JSON.Value[] {
+  const countsRaw = JSON.parse(result);
 
-  if (!averagesRaw.isArr) {
-    const avaragesArr: JSON.Arr = new JSON.Arr();
-    avaragesArr.push(averagesRaw);
-    return avaragesArr.valueOf();
-  } else if (averagesRaw.isArr) {
-    const averagesArr = averagesRaw as JSON.Arr;
-    const averages = averagesArr.valueOf();
-    return averages;
+  if (!countsRaw.isArr) {
+    const countsArr: JSON.Arr = new JSON.Arr();
+    countsArr.push(countsRaw);
+    return countsArr.valueOf();
+  } else if (countsRaw.isArr) {
+    const countsArr = countsRaw as JSON.Arr;
+    const counts = countsArr.valueOf();
+    return counts;
   } else {
-    assert(false, "Averages are not an array");
+    assert(false, "Counts are not an array");
     return [];
   }
 }
 
-function processAverages(averages: JSON.Value[]): void {
-  for (let i = 0; i < averages.length; i++) {
-    const average = averages[i] as JSON.Obj;
-    Log("Processing average: " + average.toString());
-    processSingleAvearage(average);
+function processCounts(counts: JSON.Value[]): void {
+  for (let i = 0; i < counts.length; i++) {
+    const count = counts[i] as JSON.Obj;
+    Log("Processing count: " + count.toString());
+    processSingleCount(count);
   }
 }
 
-function processSingleAvearage(average: JSON.Obj): void {
-  const deviceId = getField<JSON.Str>(average, "device_id")!.valueOf();
-  const averageScore = average.get("average_score") as JSON.Value;
-  let toMint: i32 = 0;
+function processSingleCount(count: JSON.Obj): void {
+  const deviceId = getField<JSON.Str>(count, "device_id")!.valueOf();
+  const sessionsCount = count.get("sessions_count") as JSON.Integer;
 
-  if (averageScore instanceof JSON.Integer) {
-    const avg = averageScore as JSON.Integer;
-    toMint = evaluateAvg(f64(avg.valueOf()));
-  } else if (averageScore instanceof JSON.Float) {
-    const avg = averageScore as JSON.Float;
-    toMint = evaluateAvg(avg.valueOf());
-  } else {
-    assert(false, "Average score is not a number");
-  }
-
-  if (toMint > 0 && checkDeviceRegistrationAndActivity(deviceId)) {
+  if (sessionsCount.valueOf() > 0 && checkDeviceRegistrationAndActivity(deviceId)) {
     const ownerAddr = getOwnerAddr(deviceId);
-    approveSleeprNFT(ownerAddr, toMint as number);
-  }
-}
-
-function evaluateAvg(avg: f64): i32 {
-  if (avg > 95) {
-    return 3; // Platinum
-  } else if (avg > 90) {
-    return 2; // Gold
-  } else if (avg > 80) {
-    return 1; // Silver
-  } else {
-    return 0;
+    approveSleeprNFT(ownerAddr, f64(sessionsCount.valueOf()));
   }
 }
 
@@ -128,11 +106,11 @@ function getOwnerAddr(deviceId: string): string {
   return ownerAddr;
 }
 
-function approveSleeprNFT(to: string, type: number): void {
-  const txData = buildTxData(APPROVE_FUNCTION_ADDR, to, type, 1);
-  const SLEEPR_CONTRACT_ADDRESS = GetEnv("SLEEPR_CONTRACT_ADDRESS");
+function approveSleeprNFT(to: string, amount: number): void {
+  const txData = buildTxData(APPROVE_FUNCTION_ADDR, to, 1, amount);
+  const REWARDS_CONTRACT_ADDRESS = GetEnv("REWARDS_CONTRACT_ADDRESS");
   const CHAIN_ID = GetEnv("CHAIN_ID");
-  SendTx(parseInt(CHAIN_ID), SLEEPR_CONTRACT_ADDRESS, "0", txData);
+  SendTx(i32(parseInt(CHAIN_ID)), REWARDS_CONTRACT_ADDRESS, "0", txData);
 }
 
 function buildTxData(
