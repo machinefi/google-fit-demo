@@ -1,5 +1,4 @@
 import { task } from "hardhat/config";
-import { REWARDS_URI } from "../constants";
 
 task(
   "grant-rewards-minter",
@@ -33,8 +32,8 @@ task("update-rewards-uri", "Update rewards uri").setAction(async (_, hre) => {
     deployer
   );
 
-  const tx = await rewards.setURI(REWARDS_URI || "");
+  const tx = await rewards.setURI(process.env.REWARDS_URI || "");
   await tx.wait();
 
-  console.log(`DeviceRewards uri updated to ${REWARDS_URI}`);
+  console.log(`DeviceRewards uri updated to ${process.env.REWARDS_URI}`);
 });

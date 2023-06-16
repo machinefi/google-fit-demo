@@ -3,7 +3,7 @@ import { expect } from "chai";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 import { DeviceRewards } from "../typechain-types";
-import { REWARDS_CONTRACT_NAME } from "../constants";
+import { REWARDS_CONTRACT_NAME } from "./fixtures";
 
 const TIER_1_URI =
   "ipfs://QmQr1X5o4Jhdeb6BMviYN5anHMCjeMHxQPcu45YpN8SfQD/{id}.json";

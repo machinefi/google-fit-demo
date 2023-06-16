@@ -1,6 +1,5 @@
 import { DeployFunction } from "hardhat-deploy/types";
 import { addEnvVarToWSProjectConfig } from "../utils/update-envs";
-import { REWARDS_CONTRACT_NAME, REWARDS_URI } from "../constants";
 
 const func: DeployFunction = async ({
   getNamedAccounts,
@@ -10,6 +9,10 @@ const func: DeployFunction = async ({
   const { deploy } = deployments;
   const chainId = await getChainId();
   const { deployer } = await getNamedAccounts();
+
+  const REWARDS_CONTRACT_NAME =
+    process.env.REWARDS_CONTRACT_NAME || "Device Rewards";
+  const REWARDS_URI = process.env.REWARDS_URI || "";
 
   const tx = await deploy("DeviceRewards", {
     from: deployer,

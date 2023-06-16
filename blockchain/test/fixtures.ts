@@ -6,3 +6,8 @@ export const DEVICE_ID_3 =
   "0x1234567890123456789012345678901234567890123456789012345678901236";
 export const URI_EXAMPLE =
   "ipfs://QmbfSCb68jn1kfEQpMeSCQqXMqoptUiQDkmfHxZMBFXgib";
+
+export const SBT_CONTRACT_NAME = "Device SBT";
+export const SBT_CONTRACT_SYMBOL = "DSBT";
+
+export const REWARDS_CONTRACT_NAME = "Device Rewards";

@@ -20,6 +20,24 @@ task("grant-sbt-minter", "Grant sbt minter role to an address").setAction(
   }
 );
 
+task("update-sbt-uri", "Update sbt URI")
+  .setAction(async (_, hre) => {
+    const { deployments } = hre;
+    const [deployer] = await hre.ethers.getSigners();
+
+    const DeviceSBT = await deployments.get("DeviceSBT");
+    const sbt = await hre.ethers.getContractAt(
+      "DeviceSBT",
+      DeviceSBT.address,
+      deployer
+    );
+
+    const tx = await sbt.setURI(process.env.SBT_URI);
+    await tx.wait();
+
+    console.log(`SBT URI updated to ${process.env.SBT_URI}`);
+  });
+
 task("check-sbt-balance", "Check sbt balance of an address")
   .addParam("address", "Address to check")
   .setAction(async (taskArgs, hre) => {

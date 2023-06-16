@@ -2,9 +2,8 @@ import { ethers } from "hardhat";
 import { expect } from "chai";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-import { DEVICE_ID_1, DEVICE_ID_2, URI_EXAMPLE } from "./fixtures";
+import { DEVICE_ID_1, DEVICE_ID_2, URI_EXAMPLE, SBT_CONTRACT_NAME, SBT_CONTRACT_SYMBOL } from "./fixtures";
 import { DeviceSBT } from "../typechain-types";
-import { SBT_CONTRACT_NAME, SBT_CONTRACT_SYMBOL } from "../constants";
 
 async function setup() {
   const sbt = await ethers.getContractFactory("DeviceSBT");
