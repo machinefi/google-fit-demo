@@ -1,5 +1,5 @@
 {
-  "name": "sleep_and_earn",
+  "name": "train_to_earn",
   "description": "Healthcare",
   "database": {
     "schemas": [
@@ -7,7 +7,45 @@
         "schemaName": "public",
         "tables": [
           {
-            "tableName": "sleep_scores",
+            "tableName": "t_demo",
+            "tableSchema": "public",
+            "comment": "demo table",
+            "columns": [
+              {
+                "name": "f_id",
+                "type": "int8",
+                "defaultValue": null,
+                "isIdentity": true,
+                "isNullable": false,
+                "isUnique": false,
+                "isPrimaryKey": true,
+                "comment": "primary id"
+              },
+              {
+                "name": "f_name",
+                "type": "text",
+                "defaultValue": null,
+                "isIdentity": false,
+                "isNullable": true,
+                "isUnique": false,
+                "isPrimaryKey": false,
+                "comment": null
+              },
+              {
+                "name": "f_amount",
+                "type": "float8",
+                "defaultValue": null,
+                "isIdentity": false,
+                "isNullable": true,
+                "isUnique": false,
+                "isPrimaryKey": false,
+                "comment": "amount"
+              }
+            ],
+            "relationships": []
+          },
+          {
+            "tableName": "device_binding",
             "tableSchema": "public",
             "comment": "",
             "columns": [
@@ -37,33 +75,13 @@
                 "defaultValue": null,
                 "isIdentity": false,
                 "isNullable": false,
-                "isUnique": false,
+                "isUnique": true,
                 "isPrimaryKey": false,
                 "comment": null
               },
               {
-                "name": "score_id",
+                "name": "owner_address",
                 "type": "text",
-                "defaultValue": null,
-                "isIdentity": false,
-                "isNullable": false,
-                "isUnique": true,
-                "isPrimaryKey": false,
-                "comment": null
-              },
-              {
-                "name": "timestamp",
-                "type": "timestamptz",
-                "defaultValue": null,
-                "isIdentity": false,
-                "isNullable": false,
-                "isUnique": true,
-                "isPrimaryKey": false,
-                "comment": null
-              },
-              {
-                "name": "score_value",
-                "type": "float8",
                 "defaultValue": null,
                 "isIdentity": false,
                 "isNullable": false,
@@ -75,7 +93,7 @@
             "relationships": []
           },
           {
-            "tableName": "devices_registry",
+            "tableName": "device_registry",
             "tableSchema": "public",
             "comment": "",
             "columns": [
@@ -133,7 +151,7 @@
             "relationships": []
           },
           {
-            "tableName": "device_binding",
+            "tableName": "training_sessions",
             "tableSchema": "public",
             "comment": "",
             "columns": [
@@ -163,13 +181,33 @@
                 "defaultValue": null,
                 "isIdentity": false,
                 "isNullable": false,
+                "isUnique": false,
+                "isPrimaryKey": false,
+                "comment": null
+              },
+              {
+                "name": "session_id",
+                "type": "text",
+                "defaultValue": null,
+                "isIdentity": false,
+                "isNullable": false,
                 "isUnique": true,
                 "isPrimaryKey": false,
                 "comment": null
               },
               {
-                "name": "owner_address",
-                "type": "text",
+                "name": "start_time_millis",
+                "type": "timestamp",
+                "defaultValue": null,
+                "isIdentity": false,
+                "isNullable": false,
+                "isUnique": false,
+                "isPrimaryKey": false,
+                "comment": null
+              },
+              {
+                "name": "end_time_millis",
+                "type": "timestamp",
                 "defaultValue": null,
                 "isIdentity": false,
                 "isNullable": false,
@@ -202,19 +240,19 @@
     },
     {
       "eventType": "ON_DEVICE_REGISTERED",
-      "handler": "handle_device_registered"
+      "handler": "handle_device_registration"
     },
     {
       "eventType": "ON_DEVICE_BOUND",
       "handler": "handle_device_binding"
     },
     {
-      "eventType": "SLEEP_DATA",
-      "handler": "handle_sleep_scores"
+      "eventType": "FIT_DATA",
+      "handler": "handle_receive_data"
     },
     {
-      "eventType": "ANALYZE_SLEEP",
-      "handler": "handle_evaluate_sleep"
+      "eventType": "ANALYZE_FIT_DATA",
+      "handler": "handle_analyze_data"
     }
   ]
 }
