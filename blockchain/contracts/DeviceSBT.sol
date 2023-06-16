@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 
 contract DeviceSBT is ERC721, AccessControl {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
-    string private _ringUri = "";
+    string private _deviceUri = "";
 
     mapping(uint256 => address) public sbtApprovals;
 
@@ -17,18 +17,18 @@ contract DeviceSBT is ERC721, AccessControl {
     ) ERC721(_name, _symbol) {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(MINTER_ROLE, msg.sender);
-        _ringUri = uri_;
+        _deviceUri = uri_;
     }
 
     function setURI(string memory uri) public onlyRole(DEFAULT_ADMIN_ROLE) {
-        _ringUri = uri;
+        _deviceUri = uri;
     }
 
     function tokenURI(
         uint256 tokenId
     ) public view override returns (string memory) {
         _requireMinted(tokenId);
-        return _ringUri;
+        return _deviceUri;
     }
 
     function approveSBT(

@@ -71,7 +71,7 @@ function processSingleCount(count: JSON.Obj): void {
 
   if (sessionsCount.valueOf() > 0 && checkDeviceRegistrationAndActivity(deviceId)) {
     const ownerAddr = getOwnerAddr(deviceId);
-    approveSleeprNFT(ownerAddr, f64(sessionsCount.valueOf()));
+    approveRewardsNFT(ownerAddr, f64(sessionsCount.valueOf()));
   }
 }
 
@@ -106,7 +106,7 @@ function getOwnerAddr(deviceId: string): string {
   return ownerAddr;
 }
 
-function approveSleeprNFT(to: string, amount: number): void {
+function approveRewardsNFT(to: string, amount: number): void {
   const txData = buildTxData(APPROVE_FUNCTION_ADDR, to, 1, amount);
   const REWARDS_CONTRACT_ADDRESS = GetEnv("REWARDS_CONTRACT_ADDRESS");
   const CHAIN_ID = GetEnv("CHAIN_ID");

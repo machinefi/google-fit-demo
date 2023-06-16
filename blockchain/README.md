@@ -30,9 +30,9 @@ npm run deploy:testnet
 ### 5. Run tasks
 
 ```bash
-npx hardhat grant-ring-minter --network testnet
+npx hardhat grant-sbt-minter --network testnet
 ```
 
 ```bash
-npx hardhat grant-sleepr-minter --network testnet
+npx hardhat grant-rewards-minter --network testnet
 ```

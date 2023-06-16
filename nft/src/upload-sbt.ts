@@ -5,7 +5,7 @@ import { updateUploadsFile } from "./update-config.js";
 import { getFileByPath } from "./utils/files.js";
 
 export const uploadSBT = async () => {
-  const url = await uploadRingImage();
+  const url = await uploadSBTImage();
   const metaUrl = await uploadMetadata({
     ...SBT_METADATA,
     image: url,
@@ -13,7 +13,7 @@ export const uploadSBT = async () => {
   updateUploadsFile(SBT_METADATA.name, metaUrl);
 };
 
-const uploadRingImage = async (): Promise<string | undefined> => {
+const uploadSBTImage = async (): Promise<string | undefined> => {
   const file = getFileByPath(SBT_PATH);
   return uploadImage(file, SBT_FILE_TYPE);
 };

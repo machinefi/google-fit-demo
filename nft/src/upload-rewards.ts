@@ -11,11 +11,11 @@ import { getParsedJSONFile, setJSONFile } from "./utils/files.js";
 import { getDirectorySize } from "./utils/files.js";
 
 export const uploadRewards = async () => {
-  const sleeprDirSize = getDirectorySize(PATH_TO_REWARD_TOKENS);
-  await uploadFolder(PATH_TO_REWARD_TOKENS, sleeprDirSize);
+  const rewardsDirSize = getDirectorySize(PATH_TO_REWARD_TOKENS);
+  await uploadFolder(PATH_TO_REWARD_TOKENS, rewardsDirSize);
 
-  const sleeprManifest = getParsedJSONFile(PATH_TO_REWARDS_MANIFEST);
-  processSleeprManifest(sleeprManifest);
+  const rewardsManifest = getParsedJSONFile(PATH_TO_REWARDS_MANIFEST);
+  processRewardsManifest(rewardsManifest);
 
   const metadataDirSize = getDirectorySize(PATH_TO_REWARDS_METADATA);
   const manifestId = await uploadFolder(
@@ -26,8 +26,8 @@ export const uploadRewards = async () => {
   updateUploadsFile("Rewards", ARWEAVE_BASE_URL + manifestId + "/{id}.json");
 };
 
-const processSleeprManifest = (sleeprManifest: any) => {
-  const paths = sleeprManifest.paths as { [key: string]: { id: string } };
+const processRewardsManifest = (rewardsManifest: any) => {
+  const paths = rewardsManifest.paths as { [key: string]: { id: string } };
   const imgNames = Object.keys(paths).map((key) => key);
   imgNames.forEach((name) => {
     const path = paths[name];
