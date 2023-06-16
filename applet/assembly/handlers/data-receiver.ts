@@ -4,7 +4,7 @@ import { getField, getPayloadValue } from "../utils/payload-parser";
 
 const SESSIONS_TABLE = "training_sessions";
 
-export function handle_sleep_scores(rid: i32): i32 {
+export function handle_receive_data(rid: i32): i32 {
   const deviceMessage = GetDataByRID(rid);
   const payload = getPayloadValue(deviceMessage);
 
@@ -39,7 +39,7 @@ export function handleSessions(deviceId: string, sessions: JSON.Value[]): void {
     const id = getSessionId(session as JSON.Obj);
     const startTime = getTimeValue(session as JSON.Obj, "startTimeMillis");
     const endTime = getTimeValue(session as JSON.Obj, "endTimeMillis");
-    storeScore(deviceId, id, startTime, endTime);
+    storeSession(deviceId, id, startTime, endTime);
   }
 }
 
@@ -62,16 +62,16 @@ function getTimeValue(session: JSON.Obj, timeName: string): string {
   return timeValue!.toString();
 }
 
-function storeScore(
+function storeSession(
   deviceId: string,
-  scoreId: string,
+  sessionId: string,
   startTime: string,
   endTime: string
 ): void {
-  const sql = `INSERT INTO "${SESSIONS_TABLE}" (device_id, score_id, start_time_millis, end_time_millis) VALUES (?,?,?,?);`;
+  const sql = `INSERT INTO "${SESSIONS_TABLE}" (device_id, session_id, start_time_millis, end_time_millis) VALUES (?,?,?,?);`;
   ExecSQL(sql, [
     new String(deviceId),
-    new String(scoreId),
+    new String(sessionId),
     new String(startTime),
     new String(endTime),
   ]);
