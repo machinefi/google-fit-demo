@@ -16,9 +16,9 @@ export const PATH_TO_REWARDS_METADATA = "./assets/rewards-metadata";
 export const REWARDS_METADATA: {
   [key: string]: Metadata;
 } = {
-  "mat.png": {
+  "yogamat.png": {
     index: "0000000000000000000000000000000000000000000000000000000000000001",
     name: "Yoga Mat",
-    description: "Yoga mat for a dilligent yogi",
+    description: "Yoga mat for a dilligent yogi!",
   },
 };
