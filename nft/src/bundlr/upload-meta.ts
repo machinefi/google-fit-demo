@@ -1,3 +1,4 @@
+import { ARWEAVE_BASE_URL } from "../config.js";
 import { bundlr } from "./client.js";
 import { getPriceAndTopupIfNeeded } from "./fund.js";
 
@@ -11,9 +12,9 @@ export const uploadMetadata = async (data: any) => {
       tags: [{ name: "Content-Type", value: "application/json" }],
     });
 
-    console.log(`Upload success content URI= https://arweave.net/${tx.id}`);
+    console.log(`Upload success content URI= ${ARWEAVE_BASE_URL}${tx.id}`);
 
-    return `https://arweave.net/${tx.id}`;
+    return `${ARWEAVE_BASE_URL}${tx.id}`;
   } catch (e) {
     console.log("Error on upload ", e);
   }

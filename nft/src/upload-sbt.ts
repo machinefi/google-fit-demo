@@ -1,25 +1,19 @@
 import { uploadImage } from "./bundlr/upload-img.js";
 import { uploadMetadata } from "./bundlr/upload-meta.js";
+import { SBT_FILE_TYPE, SBT_METADATA, SBT_PATH } from "./config.js";
 import { updateUploadsFile } from "./update-config.js";
 import { getFileByPath } from "./utils/files.js";
 
-const PATH_TO_RING = "./assets/ring/ring.png";
-
-const metadata = {
-  name: "Oura Ring",
-  description: "A digital twin of your Oura Ring",
-};
-
-export const uploadRingNFT = async () => {
+export const uploadSBT = async () => {
   const url = await uploadRingImage();
   const metaUrl = await uploadMetadata({
-    ...metadata,
+    ...SBT_METADATA,
     image: url,
   });
-  updateUploadsFile("ring", metaUrl);
+  updateUploadsFile(SBT_METADATA.name, metaUrl);
 };
 
 const uploadRingImage = async (): Promise<string | undefined> => {
-  const file = getFileByPath(PATH_TO_RING);
-  return uploadImage(file, "image/png");
+  const file = getFileByPath(SBT_PATH);
+  return uploadImage(file, SBT_FILE_TYPE);
 };

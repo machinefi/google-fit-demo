@@ -1,9 +1,9 @@
-import { uploadRingNFT } from "./upload-ring.js";
-import { uploadSleepr } from "./upload-sleepr.js";
+import { uploadSBT } from "./upload-sbt.js";
+import { uploadRewards } from "./upload-rewards.js";
 
 const main = async () => {
-  await uploadRingNFT();
-  await uploadSleepr();
+  await uploadSBT();
+  await uploadRewards();
 };
 
 main();
