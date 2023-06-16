@@ -16,8 +16,19 @@ import {
 } from "../utils/build-tx";
 
 const DEVICE_BINDING_TABLE = "device_binding";
-const DEVICE_REGISTRY_TABLE = "devices_registry";
-const APPROVE_FUNCTION_ADDR = "7c2d75bb";
+const DEVICE_REGISTRY_TABLE = "device_registry";
+const APPROVE_FUNCTION_ADDR = "74cdd192";
+
+export function handle_device_registered(rid: i32): i32 {
+  Log("New Device Registration Detected: ");
+  const topics = getTopics(rid);
+
+  const deviceId = getDeviceId(topics);
+  Log("Device ID: " + deviceId);
+
+  storeDeviceId(deviceId);
+  return 0;
+}
 
 export function handle_device_binding(rid: i32): i32 {
   Log("New Device Binding Detected: ");
@@ -31,18 +42,7 @@ export function handle_device_binding(rid: i32): i32 {
 
   storeDeviceBinding(deviceId, ownerAddr);
 
-  approveRingSBT(ownerAddr, deviceId);
-  return 0;
-}
-
-export function handle_device_registered(rid: i32): i32 {
-  Log("New Device Registered Detected: ");
-  const topics = getTopics(rid);
-
-  const deviceId = getDeviceId(topics);
-  Log("Device ID: " + deviceId);
-
-  storeDeviceId(deviceId);
+  approveSBT(ownerAddr, deviceId);
   return 0;
 }
 
@@ -79,11 +79,11 @@ function storeDeviceId(deviceId: string): void {
   ExecSQL(sql, [new String(deviceId), new Bool(true), new Bool(true)]);
 }
 
-function approveRingSBT(ownerAddress: string, deviceId: string): void {
+function approveSBT(ownerAddress: string, deviceId: string): void {
   const txData = buildTxData(APPROVE_FUNCTION_ADDR, ownerAddress, deviceId);
-  const RING_CONTRACT_ADDRESS = GetEnv("RING_CONTRACT_ADDRESS");
+  const SBT_CONTRACT_ADDRESS = GetEnv("SBT_CONTRACT_ADDRESS");
   const CHAIN_ID = GetEnv("CHAIN_ID");
-  SendTx(parseInt(CHAIN_ID), RING_CONTRACT_ADDRESS, "0", txData);
+  SendTx(parseInt(CHAIN_ID), SBT_CONTRACT_ADDRESS, "0", txData);
 }
 
 function buildTxData(
