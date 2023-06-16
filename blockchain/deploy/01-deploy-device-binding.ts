@@ -32,7 +32,7 @@ const func: DeployFunction = async ({
     });
     addEnvVarToWSProjectConfig({
       envName: "CHAIN_ID",
-      envValue: Number(chainId),
+      envValue: chainId,
     });
   }
 };
