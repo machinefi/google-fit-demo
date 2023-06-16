@@ -6,14 +6,14 @@ import {
   useWaitForTransaction,
 } from "wagmi";
 
-import { ringContract } from "@/features/web3/services/viem/nft";
+import { sbtContract } from "@/features/web3/services/viem/nft";
 
-export const ClaimSBTButton = ({ ringId }: { ringId: string }) => {
+export const ClaimSBTButton = ({ deviceId }: { deviceId: string }) => {
   const { config } = usePrepareContractWrite({
-    address: ringContract.address,
-    abi: ringContract.abi,
-    functionName: "mintRing",
-    args: [ringId],
+    address: sbtContract.address,
+    abi: sbtContract.abi,
+    functionName: "mintSBT",
+    args: [deviceId],
   });
   const { data, isLoading, isSuccess, write } = useContractWrite({ ...config });
 

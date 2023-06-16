@@ -2,7 +2,7 @@ const navItems = [
   { name: "Home", path: "/" },
   { name: "Dashboard", path: "/dashboard" },
   { name: "Register", path: "/register" },
-  { name: "My Rings", path: "/ring" },
+  { name: "My Rings", path: "/sbt" },
   { name: "Collect", path: "/sleepr" },
   { name: "Sync Data", path: "/syncdata" },
 ];

@@ -20,7 +20,7 @@ export default function Rings() {
         >
           <p className="text-white">{device}</p>
           <Wallet>
-            <ClaimSBTButton ringId={device} />
+            <ClaimSBTButton deviceId={device} />
           </Wallet>
         </div>
       ))}
