@@ -4,8 +4,8 @@
       "name": "testnet",
       "chainId": "4690",
       "contracts": {
-        "DevicesRegistry": {
-          "address": "0x2D495021F3c9d272ECE72221460b1167c4e735A0",
+        "DeviceRegistry": {
+          "address": "0x676662e089b47F2e0B524959fd28239d05A4BeFF",
           "abi": [
             {
               "inputs": [],
@@ -214,13 +214,13 @@
           ]
         },
         "DeviceBinding": {
-          "address": "0xA60257e60a0d322A90DD2AaAcE0aE10c16D9ebCD",
+          "address": "0xB7c2f6d30A9aDe25F2EEB2b25F698ce8e7916E16",
           "abi": [
             {
               "inputs": [
                 {
                   "internalType": "address",
-                  "name": "_devicesRegistryAddress",
+                  "name": "_deviceRegistryAddress",
                   "type": "address"
                 }
               ],
@@ -303,6 +303,19 @@
               "type": "function"
             },
             {
+              "inputs": [],
+              "name": "deviceRegistry",
+              "outputs": [
+                {
+                  "internalType": "contract DeviceRegistry",
+                  "name": "",
+                  "type": "address"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
               "inputs": [
                 {
                   "internalType": "bytes32",
@@ -314,19 +327,6 @@
               "outputs": [
                 {
                   "internalType": "address",
-                  "name": "",
-                  "type": "address"
-                }
-              ],
-              "stateMutability": "view",
-              "type": "function"
-            },
-            {
-              "inputs": [],
-              "name": "devicesRegistry",
-              "outputs": [
-                {
-                  "internalType": "contract DevicesRegistry",
                   "name": "",
                   "type": "address"
                 }
@@ -463,14 +463,24 @@
             }
           ]
         },
-        "Ring": {
-          "address": "0x5B3eBBdAa1b98E6922F11F9BfE0eA18f0437994c",
+        "DeviceSBT": {
+          "address": "0x2dc87e390595011340d7D1418634FBfaee0699bB",
           "abi": [
             {
               "inputs": [
                 {
                   "internalType": "string",
                   "name": "uri_",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "_name",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "_symbol",
                   "type": "string"
                 }
               ],
@@ -684,7 +694,7 @@
                   "type": "uint256"
                 }
               ],
-              "name": "approveRing",
+              "name": "approveSBT",
               "outputs": [],
               "stateMutability": "nonpayable",
               "type": "function"
@@ -820,7 +830,7 @@
                   "type": "uint256"
                 }
               ],
-              "name": "mintRing",
+              "name": "mintSBT",
               "outputs": [],
               "stateMutability": "nonpayable",
               "type": "function"
@@ -896,25 +906,6 @@
             {
               "inputs": [
                 {
-                  "internalType": "uint256",
-                  "name": "",
-                  "type": "uint256"
-                }
-              ],
-              "name": "ringApprovals",
-              "outputs": [
-                {
-                  "internalType": "address",
-                  "name": "",
-                  "type": "address"
-                }
-              ],
-              "stateMutability": "view",
-              "type": "function"
-            },
-            {
-              "inputs": [
-                {
                   "internalType": "address",
                   "name": "to",
                   "type": "address"
@@ -979,6 +970,25 @@
               "name": "safeTransferFrom",
               "outputs": [],
               "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "name": "sbtApprovals",
+              "outputs": [
+                {
+                  "internalType": "address",
+                  "name": "",
+                  "type": "address"
+                }
+              ],
+              "stateMutability": "view",
               "type": "function"
             },
             {
@@ -1088,14 +1098,19 @@
             }
           ]
         },
-        "Sleepr": {
-          "address": "0x4544EAb86Ea55471ea8B924bAB202E53147215ED",
+        "DeviceRewards": {
+          "address": "0xB716507aB2080d2401785Ea35929E0d0Ad33CAEc",
           "abi": [
             {
               "inputs": [
                 {
                   "internalType": "string",
                   "name": "newuri",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "_name",
                   "type": "string"
                 }
               ],
@@ -1605,6 +1620,19 @@
               "name": "mintFromAllowance",
               "outputs": [],
               "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "name",
+              "outputs": [
+                {
+                  "internalType": "string",
+                  "name": "",
+                  "type": "string"
+                }
+              ],
+              "stateMutability": "view",
               "type": "function"
             },
             {
