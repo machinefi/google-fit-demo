@@ -30,6 +30,7 @@ Upload your NFT images and the corresponding metadata to a file storage of your 
 - Create `.env` file and add your `PRIVATE_KEY` _(The account will be used to pay Bundlr fees with testnet tokens, please make sure to top up the corresponding account with some Matic tokens, [link to faucet](https://mumbaifaucet.com))_
 - Run `npm start`
 - You'll find NFT URIs in `nft/uploads.json` (you'll need them at [Step 2](#step-2-blockchain-environment-preparation))
+- _If funding while uploading fails, you can manually run fund script first `npm run fund`_
 
 ### Upstash
 
