@@ -1,21 +1,21 @@
 const features = [
   {
     title: "Claim SBT",
-    description: "Claim SBT for your Oura Ring",
+    description: "Claim SBT for your Device",
     buttonText: "Claim Now",
-    buttonLink: "/ring",
+    buttonLink: "/sbt",
   },
   {
-    title: "Sync Your Ring",
-    description: "Sync your Oura ring data to the w3bstream",
+    title: "Sync Your Google Fit data",
+    description: "Sync your Google Fit data to the w3bstream",
     buttonText: "Start Syncing",
     buttonLink: "/syncdata",
   },
   {
     title: "Collect NFTs",
-    description: "Collect NFTs for your quality sleep",
+    description: "Collect NFTs for your training sessions",
     buttonText: "Start Collecting",
-    buttonLink: "/sleepr",
+    buttonLink: "/rewards",
   },
 ];
 
