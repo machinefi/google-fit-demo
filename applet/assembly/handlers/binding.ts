@@ -83,7 +83,7 @@ function approveSBT(ownerAddress: string, deviceId: string): void {
   const txData = buildTxData(APPROVE_FUNCTION_ADDR, ownerAddress, deviceId);
   const SBT_CONTRACT_ADDRESS = GetEnv("SBT_CONTRACT_ADDRESS");
   const CHAIN_ID = GetEnv("CHAIN_ID");
-  SendTx(parseInt(CHAIN_ID), SBT_CONTRACT_ADDRESS, "0", txData);
+  SendTx(i32(parseInt(CHAIN_ID)), SBT_CONTRACT_ADDRESS, "0", txData);
 }
 
 function buildTxData(
