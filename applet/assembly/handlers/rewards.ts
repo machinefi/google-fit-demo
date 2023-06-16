@@ -17,7 +17,7 @@ const SESSION_DURATION_MILLIS = 1000 * 60 * 30; // 30 minutes
 
 const APPROVE_FUNCTION_ADDR = "426a8493";
 
-export function handle_evaluate_sleep(rid: i32): i32 {
+export function handle_analyze_data(rid: i32): i32 {
   const sessionCounts = getSessionsCount();
   processCounts(sessionCounts);
   return 0;

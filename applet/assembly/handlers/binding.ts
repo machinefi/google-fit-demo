@@ -19,7 +19,7 @@ const DEVICE_BINDING_TABLE = "device_binding";
 const DEVICE_REGISTRY_TABLE = "device_registry";
 const APPROVE_FUNCTION_ADDR = "74cdd192";
 
-export function handle_device_registered(rid: i32): i32 {
+export function handle_device_registration(rid: i32): i32 {
   Log("New Device Registration Detected: ");
   const topics = getTopics(rid);
 
