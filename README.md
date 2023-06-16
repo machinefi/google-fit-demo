@@ -1,6 +1,6 @@
-# Oura Ring integration with W3bstream
+# Google Fit integration with W3bstream
 
-_An example of tokenizing sleep data proof via [W3bstream protocol](https://w3bstream.com) and [Oura Cloud](https://ouraring.com/developer)_
+_An example of tokenizing training session proofs via [W3bstream protocol](https://w3bstream.com) and [Google Fit](https://www.google.com/fit/)_
 
 ## Table of Contents
 
@@ -20,15 +20,21 @@ Before you begin, there are several prerequisites that must be met:
 
 ### NFT URI
 
-- Upload your NFT images and the corresponding metadata to a file storage of your choice.
-> [Pinata](https://pinata.cloud/) is recommended for this purpose, and you can follow [this guide](https://docs.pinata.cloud/nfts#now-how-do-i-create-a-file-like-this) for detailed instructions.
-- You will need to upload one image and one metadata JSON file for the ERC721 Ring NFT.
-- For the ERC1155 Sleepr NFT, upload three images along with their corresponding metadata JSON files to represent the Silver, Golden, and Platinum tiers.
-- Example files can be found in the `blockchain/assets` directory.
+> You will need to upload one image and one metadata JSON file for the ERC721 Device SBT.
+> For the ERC1155 Rewards - one image along with its corresponding metadata JSON file to represent the Rewards for completed training sessions.
+
+Upload your NFT images and the corresponding metadata to a file storage of your choice or use a script in `nft` directory that will upload files to [Arweave](https://www.arweave.org) via [Bundlr](https://bundlr.network):
+
+- After cloning the repo navigate to `nft` directory and run `npm i`
+- In `assets` subdir you can find images for SBT and Rewards NFTs. _You can update images with your own, but don't forget to update config file in `src/config`_
+- Create `.env` file and add your `PRIVATE_KEY` _(The account will be used to pay Bundlr fees with testnet tokens, please make sure to top up the corresponding account with some Matic tokens, [link to faucet](https://mumbaifaucet.com))_
+- Run `npm start`
+- You'll find NFT URIs in `nft/uploads.json` (you'll need them at [Step 2](#step-2-blockchain-environment-preparation))
 
 ### Upstash
 
 > For storing encrypted Oura Personal Access Tokens and tracking the last data synchronization timestamp, we use a serverless database with a Redis API. We recommend Upstash for this, as it offers a user-friendly interface for setting up such databases.
+
 - Create a new database in [Upstash](https://console.upstash.com/).
 - Keep note of the `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` variables. You can find these in the `Details` page under the `REST API` section.
 
@@ -48,9 +54,10 @@ Follow the steps below to set up and run the project.
 - Update the `RING_URI` and `SLEEPR_URI` variables in the `.env` file as per your setup (see [NFT URI](#nft-uri)):
 
   ```env
-  RING_URI=ipfs://QmPyy2ug3WowMZCdQgzA69pu6mn3PzghASV8rcKiu4uw31
-  SLEEPR_URI="ipfs://QmUWjpuGGgqQQygrTfRaytB1Z9edd8wRiWx5kvzQudNTxy/{id}.json"
+  RING_URI=https://arweave.net/PKj_xuWomLBPF9VhsK5R79niHyOifF-5hlj3R8QOQCo
+  SLEEPR_URI=https://arweave.net/B5lWpjakdcVtyHNHhXwvc1RBEgENfD_8YA7ANKofwSw/{id}.json
   ```
+
 - The `OPERATOR_ADDRESS` will be acquired in the subsequent step.
 - Compile the contracts and generate contract types by running `npm run compile`.
 - Ensure everything is working by running `npm run test`.
@@ -75,6 +82,7 @@ Follow the steps below to set up and run the project.
 
 - Create a new file named `.env.local` and populate it with the variables from `.env.template`.
 - Navigate to Devices in the studio interface to find the device token and update `DEVICE_TOKEN`.
+- `ENCRYPT_KEY` can be aquired in [Vercel secret generator](https://generate-secret.vercel.app/32)
 - Find the `HTTP_ROUTE` under Events.
 - Start the client by running `npm run dev` and navigate to localhost:3000 in your web browser.
 - Follow the on-screen instructions to register your device, check encrypted token in the Redis db Data Browser, and claim your SBT.
