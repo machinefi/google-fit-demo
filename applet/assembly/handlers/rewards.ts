@@ -8,18 +8,12 @@ import {
   buildTxString,
 } from "../utils/build-tx";
 
-const DEVICE_REGISTRY_TABLE = "device_registry";
-const SESSIONS_TABLE = "training_sessions";
-const DEVICE_BINDING_TABLE = "device_binding";
-
-const EVALUATION_PERIOD_DAYS = 1;
-const SESSION_DURATION_MILLIS = 1000 * 60 * 30; // 30 minutes
-
 const APPROVE_FUNCTION_ADDR = "426a8493";
 
 export function handle_analyze_data(rid: i32): i32 {
   const sessionCounts = getSessionsCount();
   processCounts(sessionCounts);
+  cleanDB();
   return 0;
 }
 
@@ -30,11 +24,15 @@ function getSessionsCount(): JSON.Value[] {
 }
 
 function querySessionCounts(): string {
+  const TRAINING_SESSIONS_TABLE = GetEnv("TRAINING_SESSIONS_TABLE");
+  const EVALUATION_PERIOD_DAYS = GetEnv("EVALUATION_PERIOD_DAYS");
+  const SESSION_DURATION_MILLIS = GetEnv("SESSION_DURATION_MILLIS");
+  
   const sql = `
     SELECT device_id, COUNT(*) as sessions_count
-    FROM ${SESSIONS_TABLE}
+    FROM ${TRAINING_SESSIONS_TABLE}
     WHERE (end_time_millis - start_time_millis) > ${SESSION_DURATION_MILLIS}
-    AND start_time_millis > NOW() - INTERVAL '${EVALUATION_PERIOD_DAYS} days'
+    AND start_time_millis > EXTRACT(EPOCH FROM NOW() - INTERVAL '${EVALUATION_PERIOD_DAYS} days') * 1000
     GROUP BY device_id;
   `;
   return QuerySQL(sql);
@@ -58,6 +56,7 @@ function parseSessionCounts(result: string): JSON.Value[] {
 }
 
 function processCounts(counts: JSON.Value[]): void {
+  Log("Processing counts: " + counts.toString());
   for (let i = 0; i < counts.length; i++) {
     const count = counts[i] as JSON.Obj;
     Log("Processing count: " + count.toString());
@@ -69,13 +68,17 @@ function processSingleCount(count: JSON.Obj): void {
   const deviceId = getField<JSON.Str>(count, "device_id")!.valueOf();
   const sessionsCount = count.get("sessions_count") as JSON.Integer;
 
-  if (sessionsCount.valueOf() > 0 && checkDeviceRegistrationAndActivity(deviceId)) {
+  if (
+    sessionsCount.valueOf() > 0 &&
+    checkDeviceRegistrationAndActivity(deviceId)
+  ) {
     const ownerAddr = getOwnerAddr(deviceId);
     approveRewardsNFT(ownerAddr, f64(sessionsCount.valueOf()));
   }
 }
 
 function checkDeviceRegistrationAndActivity(deviceId: string): bool {
+  const DEVICE_REGISTRY_TABLE = GetEnv("DEVICE_REGISTRY_TABLE");
   const sql = `SELECT is_registered, is_active FROM ${DEVICE_REGISTRY_TABLE} WHERE device_id = ?;`;
   const deviceData = QuerySQL(sql, [new String(deviceId)]);
 
@@ -94,6 +97,7 @@ function checkDeviceRegistrationAndActivity(deviceId: string): bool {
 }
 
 function getOwnerAddr(deviceId: string): string {
+  const DEVICE_BINDING_TABLE = GetEnv("DEVICE_BINDING_TABLE");
   const sql = `SELECT owner_address FROM ${DEVICE_BINDING_TABLE} WHERE device_id = ?;`;
   const ownerAddrData = QuerySQL(sql, [new String(deviceId)]);
 
@@ -129,4 +133,12 @@ function buildTxData(
     slotForTierId,
     slotForAmount,
   ]);
+}
+
+function cleanDB(): void {
+  const TRAINING_SESSIONS_TABLE = GetEnv("TRAINING_SESSIONS_TABLE");
+  const sql = `
+    DELETE FROM ${TRAINING_SESSIONS_TABLE}
+  `;
+  QuerySQL(sql);
 }
