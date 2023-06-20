@@ -15,8 +15,6 @@ import {
   buildTxString,
 } from "../utils/build-tx";
 
-const DEVICE_BINDING_TABLE = "device_binding";
-const DEVICE_REGISTRY_TABLE = "device_registry";
 const APPROVE_FUNCTION_ADDR = "74cdd192";
 
 export function handle_device_registration(rid: i32): i32 {
@@ -69,12 +67,14 @@ function getOwnerAddr(topics: JSON.Arr): string {
 
 function storeDeviceBinding(deviceId: string, ownerAddr: string): void {
   Log("Storing device binding in DB...");
+  const DEVICE_BINDING_TABLE = GetEnv("DEVICE_BINDING_TABLE");
   const sql = `INSERT INTO "${DEVICE_BINDING_TABLE}" (device_id, owner_address) VALUES (?,?);`;
   ExecSQL(sql, [new String(deviceId), new String(ownerAddr)]);
 }
 
 function storeDeviceId(deviceId: string): void {
   Log("Storing device id in DB...");
+  const DEVICE_REGISTRY_TABLE = GetEnv("DEVICE_REGISTRY_TABLE");
   const sql = `INSERT INTO "${DEVICE_REGISTRY_TABLE}" (device_id, is_registered, is_active) VALUES (?,?,?);`;
   ExecSQL(sql, [new String(deviceId), new Bool(true), new Bool(true)]);
 }

@@ -1,8 +1,6 @@
-import { GetDataByRID, JSON, ExecSQL } from "@w3bstream/wasm-sdk";
+import { GetDataByRID, JSON, ExecSQL, GetEnv } from "@w3bstream/wasm-sdk";
 import { String } from "@w3bstream/wasm-sdk/assembly/sql";
 import { getField, getPayloadValue } from "../utils/payload-parser";
-
-const SESSIONS_TABLE = "training_sessions";
 
 export function handle_receive_data(rid: i32): i32 {
   const deviceMessage = GetDataByRID(rid);
@@ -68,7 +66,8 @@ function storeSession(
   startTime: string,
   endTime: string
 ): void {
-  const sql = `INSERT INTO "${SESSIONS_TABLE}" (device_id, session_id, start_time_millis, end_time_millis) VALUES (?,?,?,?);`;
+  const TRAINING_SESSIONS_TABLE = GetEnv("TRAINING_SESSIONS_TABLE");
+  const sql = `INSERT INTO "${TRAINING_SESSIONS_TABLE}" (device_id, session_id, start_time_millis, end_time_millis) VALUES (?,?,?,?);`;
   ExecSQL(sql, [
     new String(deviceId),
     new String(sessionId),

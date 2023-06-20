@@ -27,7 +27,7 @@ function querySessionCounts(): string {
   const TRAINING_SESSIONS_TABLE = GetEnv("TRAINING_SESSIONS_TABLE");
   const EVALUATION_PERIOD_DAYS = GetEnv("EVALUATION_PERIOD_DAYS");
   const SESSION_DURATION_MILLIS = GetEnv("SESSION_DURATION_MILLIS");
-  
+
   const sql = `
     SELECT device_id, COUNT(*) as sessions_count
     FROM ${TRAINING_SESSIONS_TABLE}
