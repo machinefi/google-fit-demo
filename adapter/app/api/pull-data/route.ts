@@ -8,7 +8,7 @@ import { FitSession, FitSessionRaw } from "@/app/types";
 import { uploadFitSessionToWS } from "@/features/fitness-data/services/w3bstream/client";
 
 const YOGA_ACTIVITY_TYPE = 100;
-const NEXT_FETCH_TIME_KEY = "gfitStart";
+const NEXT_FETCH_TIME_KEY = "gfitStart:";
 const DEFAULT_FETCH_DAYS = 7;
 const DEFAULT_TIME_INCREMENT_MS = 1;
 
@@ -47,9 +47,9 @@ async function processDevice(accessToken: string, deviceId: string) {
 async function getLastFetchDate(deviceId: string): Promise<string> {
   const _deviceId = deviceId.replace("0x", "");
   const date = await loadDate<string | null>(NEXT_FETCH_TIME_KEY + _deviceId);
-  if (date === null) {
+  if (!date) {
     const today = new Date();
-    today.setDate(today.getDate() - DEFAULT_FETCH_DAYS); // 7 days ago
+    today.setDate(today.getDate() - DEFAULT_FETCH_DAYS); 
     return today.toISOString();
   }
 
@@ -75,8 +75,8 @@ async function updateLastFetchDate(deviceId: string, data: FitSessionRaw[]) {
   if (data.length === 0) {
     return;
   }
-  const startTimestamps = data.map((d) => Number(d.startTimeMillis));
-  const lastTimestamp = Math.max(...startTimestamps);
+  const endTimestamps = data.map((d) => Number(d.endTimeMillis));
+  const lastTimestamp = Math.max(...endTimestamps);
   const incrementedTs = lastTimestamp + DEFAULT_TIME_INCREMENT_MS;
   const nextStartTime = new Date(incrementedTs).toISOString();
 
