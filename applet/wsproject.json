@@ -227,6 +227,26 @@
       [
         "LOG_LEVEL",
         "debug"
+      ],
+      [
+        "DEVICE_BINDING_TABLE",
+        "device_binding"
+      ],
+      [
+        "DEVICE_REGISTRY_TABLE",
+        "device_registry"
+      ],
+      [
+        "TRAINING_SESSIONS_TABLE",
+        "training_sessions"
+      ],
+      [
+        "EVALUATION_PERIOD_DAYS",
+        "1"
+      ],
+      [
+        "SESSION_DURATION_MILLIS",
+        "1800000"
       ]
     ]
   },
