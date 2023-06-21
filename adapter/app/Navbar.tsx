@@ -1,10 +1,10 @@
 const navItems = [
   { name: "Home", path: "/" },
-  { name: "Dashboard", path: "/dashboard" },
   { name: "Register", path: "/register" },
+  { name: "Dashboard", path: "/dashboard" },
   { name: "My Devices", path: "/sbt" },
-  { name: "Collect", path: "/rewards" },
   { name: "Sync Data", path: "/syncdata" },
+  { name: "Collect", path: "/rewards" },
 ];
 
 export const Navbar = () => {
