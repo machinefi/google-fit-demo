@@ -29,12 +29,17 @@ export async function registerDevice(deviceId: string) {
 }
 
 async function isRegistered(deviceId: string) {
-  const isAuthorized = await publicClient.readContract({
-    address: registryConfig.address as `0x${string}`,
-    abi: registryConfig.abi,
-    functionName: "isAuthorizedDevice",
-    args: [deviceId],
-  })
-
-  return isAuthorized;
+  try {
+    const isAuthorized = await publicClient.readContract({
+      address: registryConfig.address as `0x${string}`,
+      abi: registryConfig.abi,
+      functionName: "isAuthorizedDevice",
+      args: [deviceId],
+    })
+  
+    return isAuthorized;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
 }

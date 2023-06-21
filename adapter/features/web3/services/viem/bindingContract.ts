@@ -18,7 +18,7 @@ export async function bindDevice(deviceId: string, ownerAddr: string) {
   if (bindingState === ownerAddr) {
     return { transactionHash: "already bound" };
   }
-  if (!!bindingState) {
+  if (bindingState != "0x0000000000000000000000000000000000000000" && !!bindingState) {
     throw new Error("Device already bound to another address");
   }
 
@@ -34,12 +34,17 @@ export async function bindDevice(deviceId: string, ownerAddr: string) {
 }
 
 async function getBindingState(deviceId: string) {
-  const deviceOwner = await publicClient.readContract({
-    address: bindingConfig.address as `0x${string}`,
-    abi: bindingConfig.abi,
-    functionName: "getDeviceOwner",
-    args: [deviceId],
-  }) as unknown as string | undefined | null;
-
-  return deviceOwner;
+  try {
+    const deviceOwner = await publicClient.readContract({
+      address: bindingConfig.address as `0x${string}`,
+      abi: bindingConfig.abi,
+      functionName: "getDeviceOwner",
+      args: [deviceId],
+    }) as unknown as string | undefined | null;
+  
+    return deviceOwner;
+  } catch (e) {
+    console.log(e);
+    return undefined;
+  }
 }
