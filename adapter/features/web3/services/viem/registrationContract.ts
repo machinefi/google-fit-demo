@@ -13,6 +13,10 @@ export const registryContract = getContract({
 });
 
 export async function registerDevice(deviceId: string) {
+  if (await isRegistered(deviceId)) {
+    return { transactionHash: "already registered" };
+  }
+
   const { request } = await publicClient.simulateContract({
     account: walletClient.account,
     address: registryConfig.address as `0x${string}`,
@@ -22,4 +26,15 @@ export async function registerDevice(deviceId: string) {
   });
   const hash = await walletClient.writeContract(request);
   return publicClient.waitForTransactionReceipt({ hash, confirmations: 1 });
+}
+
+async function isRegistered(deviceId: string) {
+  const isAuthorized = await publicClient.readContract({
+    address: registryConfig.address as `0x${string}`,
+    abi: registryConfig.abi,
+    functionName: "isAuthorizedDevice",
+    args: [deviceId],
+  })
+
+  return isAuthorized;
 }

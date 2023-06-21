@@ -13,6 +13,15 @@ export const bindingContract = getContract({
 });
 
 export async function bindDevice(deviceId: string, ownerAddr: string) {
+  const bindingState = await getBindingState(deviceId);
+
+  if (bindingState === ownerAddr) {
+    return { transactionHash: "already bound" };
+  }
+  if (!!bindingState) {
+    throw new Error("Device already bound to another address");
+  }
+
   const { request } = await publicClient.simulateContract({
     account: walletClient.account,
     address: bindingConfig.address as `0x${string}`,
@@ -22,4 +31,15 @@ export async function bindDevice(deviceId: string, ownerAddr: string) {
   });
   const hash = await walletClient.writeContract(request);
   return publicClient.waitForTransactionReceipt({ hash, confirmations: 1 });
+}
+
+async function getBindingState(deviceId: string) {
+  const deviceOwner = await publicClient.readContract({
+    address: bindingConfig.address as `0x${string}`,
+    abi: bindingConfig.abi,
+    functionName: "getDeviceOwner",
+    args: [deviceId],
+  }) as unknown as string | undefined | null;
+
+  return deviceOwner;
 }
