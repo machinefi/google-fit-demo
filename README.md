@@ -18,6 +18,10 @@ _An example of tokenizing training session proofs via [W3bstream protocol](https
 
 Before you begin, there are several prerequisites that must be met:
 
+### Google OAuth Client
+
+To get access to the Fitness REST API we will need to create an OAuth Client. Follow [these steps](https://developers.google.com/fit/rest/v1/get-started) to obtain GOOGLE_ID (Client ID) and GOOGLE_SECRET (Client secret)
+
 ### NFT URI
 
 > You will need to upload one image and one metadata JSON file for the ERC721 Device SBT.
