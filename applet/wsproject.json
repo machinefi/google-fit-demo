@@ -197,7 +197,7 @@
               },
               {
                 "name": "start_time_millis",
-                "type": "timestamp",
+                "type": "int8",
                 "defaultValue": null,
                 "isIdentity": false,
                 "isNullable": false,
@@ -207,7 +207,7 @@
               },
               {
                 "name": "end_time_millis",
-                "type": "timestamp",
+                "type": "int8",
                 "defaultValue": null,
                 "isIdentity": false,
                 "isNullable": false,
