@@ -24,8 +24,8 @@ export default function Home() {
       </div>
       <div className="flex flex-col items-center justify-center">
         <a href="/register">
-          <button className="flex items-center justify-center w-32 h-32 rounded-full text-white bg-blue-500 hover:bg-blue-700 text-2xl font-bold">
-            Get Started
+          <button className="flex items-center justify-center w-32 h-32 rounded-full bg-gradient-radial from-violet-500 to-fuchsia-500 text-2xl shadow-2xl shadow-cyan-500/50 hover:shadow-cyan-500">
+            Start
           </button>
         </a>
       </div>

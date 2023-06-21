@@ -1,13 +1,9 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../pages/api/auth/[...nextauth]";
 
-import { Inter } from "next/font/google";
-
 import Providers from "./providers";
 import "./globals.css";
 import { Navbar } from "./Navbar";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "Oura Demo",
@@ -23,7 +19,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className="font-mono">
         <Navbar />
         <Providers session={session}>{children}</Providers>
       </body>
