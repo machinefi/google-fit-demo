@@ -14,6 +14,7 @@ export const SyncButton = () => {
     setLoading(true);
     try {
       await axios.post("/api/pull-data", { deviceId: devices[0] });
+      await axios.post("/api/evaluate");
       setSuccess(true);
     } catch (e: any) {
       console.log(e);
