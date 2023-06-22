@@ -84,6 +84,7 @@ Follow the steps below to set up and run the project.
 - Navigate to Devices in the studio interface to find the device token and update `DEVICE_TOKEN`.
 - `NEXTAUTH_SECRET` can be aquired in [Vercel secret generator](https://generate-secret.vercel.app/32)
 - Find the `HTTP_ROUTE` under Events.
+- In Google Console add new Authorized Redirect Url: `http://localhost:3000/api/auth/callback/google`
 - Start the client by running `npm run dev` and navigate to localhost:3000 in your web browser.
 - Follow the on-screen instructions to register your device and claim your SBT.
 - Sync the Google Fit data and then recheck the studio db and proceed to claim your rewards.
