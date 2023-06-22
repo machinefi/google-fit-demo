@@ -38,10 +38,10 @@ Upload your NFT images and the corresponding metadata to a file storage of your 
 
 ### Redis
 
-> For fast storing and retrieving the last data synchronization timestamp, we use a serverless database with a Redis API. We recommend Google Memorystore for Redis for this, as it offers a user-friendly interface for setting up such databases.
+> For fast storing and retrieving the last data synchronization timestamp, we use a serverless database with a Redis API.
 
-- Create a [new Redis instance](https://cloud.google.com/memorystore/docs/redis/create-instance-console#creating_a_redis_instance) in Google Cloud Console.
-- Keep note of the `REDIS_HOST` and `REDIS_PORT` of the created instance. You can find these in the `Instances` page under the `Memorystore` section.
+- Create a new Redis instance of your choice.
+- Keep note of the `REDIS_URL` of the created instance, we will use it in the [step 5](#step-5-adapter-configuration)
 
 ## Project Setup and Execution Instructions
 
