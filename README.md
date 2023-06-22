@@ -6,7 +6,7 @@ _An example of tokenizing training session proofs via [W3bstream protocol](https
 
 - [Prerequisites](#prerequisites)
   - [NFT URI](#nft-uri)
-  - [Upstash](#upstash)
+  - [Redis](#redis)
 - [Project Setup and Execution Instructions](#project-setup-and-execution-instructions)
   - [Step 1: Repository Cloning and Dependency Installation](#step-1-repository-cloning-and-dependency-installation)
   - [Step 2: Blockchain Environment Preparation](#step-2-blockchain-environment-preparation)
@@ -36,12 +36,12 @@ Upload your NFT images and the corresponding metadata to a file storage of your 
 - You'll find NFT URIs in `nft/uploads.json` (you'll need them at [Step 2](#step-2-blockchain-environment-preparation))
 - _If funding while uploading fails, you can manually run fund script first `npm run fund`_
 
-### Upstash
+### Redis
 
-> For storing encrypted Oura Personal Access Tokens and tracking the last data synchronization timestamp, we use a serverless database with a Redis API. We recommend Upstash for this, as it offers a user-friendly interface for setting up such databases.
+> For fast storing and retrieving the last data synchronization timestamp, we use a serverless database with a Redis API. We recommend Google Memorystore for Redis for this, as it offers a user-friendly interface for setting up such databases.
 
-- Create a new database in [Upstash](https://console.upstash.com/).
-- Keep note of the `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` variables. You can find these in the `Details` page under the `REST API` section.
+- Create a [new Redis instance](https://cloud.google.com/memorystore/docs/redis/create-instance-console#creating_a_redis_instance) in Google Cloud Console.
+- Keep note of the `REDIS_HOST` and `REDIS_PORT` of the created instance. You can find these in the `Instances` page under the `Memorystore` section.
 
 ## Project Setup and Execution Instructions
 

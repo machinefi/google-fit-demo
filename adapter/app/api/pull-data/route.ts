@@ -46,7 +46,7 @@ async function processDevice(accessToken: string, deviceId: string) {
 
 async function getLastFetchDate(deviceId: string): Promise<string> {
   const _deviceId = deviceId.replace("0x", "");
-  const date = await loadDate<string | null>(NEXT_FETCH_TIME_KEY + _deviceId);
+  const date = await loadDate(NEXT_FETCH_TIME_KEY + _deviceId);
   if (!date) {
     const today = new Date();
     today.setDate(today.getDate() - DEFAULT_FETCH_DAYS); 
