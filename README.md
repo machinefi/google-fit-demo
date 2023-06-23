@@ -6,7 +6,6 @@ _An example of tokenizing training session proofs via [W3bstream protocol](https
 
 - [Prerequisites](#prerequisites)
   - [NFT URI](#nft-uri)
-  - [Redis](#redis)
 - [Project Setup and Execution Instructions](#project-setup-and-execution-instructions)
   - [Step 1: Repository Cloning and Dependency Installation](#step-1-repository-cloning-and-dependency-installation)
   - [Step 2: Blockchain Environment Preparation](#step-2-blockchain-environment-preparation)
@@ -35,13 +34,6 @@ Upload your NFT images and the corresponding metadata to a file storage of your 
 - Run `npm run upload`
 - You'll find NFT URIs in `nft/uploads.json` (you'll need them at [Step 2](#step-2-blockchain-environment-preparation))
 - _If funding while uploading fails, you can manually run fund script first `npm run fund`_
-
-### Redis
-
-> For fast storing and retrieving the last data synchronization timestamp, we use a serverless database with a Redis API.
-
-- Create a new Redis instance of your choice.
-- Keep note of the `REDIS_URL` of the created instance, we will use it in the [step 5](#step-5-adapter-configuration)
 
 ## Project Setup and Execution Instructions
 

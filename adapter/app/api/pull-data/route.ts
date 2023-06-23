@@ -1,16 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 
-import { loadDate } from "@/features/secrets/services/redis/load";
-import { storeString } from "@/features/secrets/services/redis/store";
 import { fetchFitSessions } from "@/features/fitness-data/services/google/get-fit-session";
 import { FitSession, FitSessionRaw } from "@/app/types";
 import { uploadFitSessionToWS } from "@/features/fitness-data/services/w3bstream/client";
 
 const YOGA_ACTIVITY_TYPE = 100;
-const NEXT_FETCH_TIME_KEY = "gfitStart:";
 const DEFAULT_FETCH_DAYS = 7;
 const DEFAULT_TIME_INCREMENT_MS = 1;
+
+const lastSyncTimings: {
+  [key: string]: {
+    lastFetchDate: string;
+  }
+} = {}
 
 export async function POST(req: NextRequest) {
   const { deviceId } = await req.json();
@@ -45,8 +48,7 @@ async function processDevice(accessToken: string, deviceId: string) {
 }
 
 async function getLastFetchDate(deviceId: string): Promise<string> {
-  const _deviceId = deviceId.replace("0x", "");
-  const date = await loadDate(NEXT_FETCH_TIME_KEY + _deviceId);
+  const date = loadDate(deviceId);
   if (!date) {
     const today = new Date();
     today.setDate(today.getDate() - DEFAULT_FETCH_DAYS); 
@@ -71,7 +73,6 @@ function processData(data: FitSessionRaw[]): FitSession[] {
 }
 
 async function updateLastFetchDate(deviceId: string, data: FitSessionRaw[]) {
-  const _deviceId = deviceId.replace("0x", "");
   if (data.length === 0) {
     return;
   }
@@ -80,5 +81,16 @@ async function updateLastFetchDate(deviceId: string, data: FitSessionRaw[]) {
   const incrementedTs = lastTimestamp + DEFAULT_TIME_INCREMENT_MS;
   const nextStartTime = new Date(incrementedTs).toISOString();
 
-  await storeString(NEXT_FETCH_TIME_KEY + _deviceId, nextStartTime);
+  storeString(deviceId, nextStartTime);
+}
+
+
+function loadDate(key: string): string {
+  return lastSyncTimings[key]?.lastFetchDate || "";
+}
+
+function storeString(key: string, value: string) {
+  lastSyncTimings[key] = {
+    lastFetchDate: value,
+  };
 }
