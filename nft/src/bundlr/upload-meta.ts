@@ -6,7 +6,7 @@ export const uploadMetadata = async (data: any) => {
   try {
     const serialized = JSON.stringify(data);
 
-    await getPriceAndTopupIfNeeded(new Blob([serialized]).size);
+    await getPriceAndTopupIfNeeded(Buffer.from(serialized).length);
 
     const tx = await bundlr.upload(serialized, {
       tags: [{ name: "Content-Type", value: "application/json" }],
