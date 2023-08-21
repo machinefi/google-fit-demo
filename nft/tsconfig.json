@@ -24,5 +24,8 @@
   ] /* Specify an array of glob patterns that match TypeScript files. */,
   "exclude": [
     "node_modules"
-  ] /* Specify an array of glob patterns to exclude from TypeScript files. */
+  ] /* Specify an array of glob patterns to exclude from TypeScript files. */,
+  "ts-node": {
+    "esm": true,
+  }
 }
