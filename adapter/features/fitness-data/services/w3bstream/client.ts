@@ -24,6 +24,7 @@ export async function uploadFitSessionToWS(
     timestamp: Date.now(),
   }
   const payload = {
+    deviceId,
     data,
   }
 

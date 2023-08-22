@@ -13,7 +13,7 @@ export const CollectButton = ({ tier }: { tier: number }) => {
     address: rewardsContract.address,
     abi: rewardsContract.abi,
     functionName: "mintFromAllowance",
-    args: [tier, []],
+    args: [tier, ""],
   });
 
   const { data, isLoading, isSuccess, write } = useContractWrite(config);

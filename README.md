@@ -62,7 +62,6 @@ Follow the steps below to set up and run the project.
 - In the `applet/wsproject.json` file, change the project name from "sleep_and_earn" to your preferred name.
 - Compile the AssemblyScript code by navigating to the `applet` directory and running `npm run asbuild`.
 - Import the modified project into the W3bstream studio. Use `applet/wsproject.json` as the `Project file` and `applet/build/release.wasm` as the `Wasm file`.
-- Generate a new device in the studio (Devices -> Create Device).
 - Send a test message in Log.
 - Boost the operator address with Testnet IOTX token. The operator address can be found in Settings. An estimated 5 IOTX should suffice.
 
@@ -75,7 +74,7 @@ Follow the steps below to set up and run the project.
 ### Step 5: Adapter Configuration
 
 - Create a new file named `.env.local` and populate it with the variables from `.env.template`.
-- Navigate to Account Settings in the studio interface to create an API key with `Publisher` read and write persmisisons and update `API_TOKEN`.
+- Navigate to Account Settings in the studio interface to create an API key with `Publisher and Event` read and write persmisisons and update `API_TOKEN`.
 - `NEXTAUTH_SECRET` can be aquired in [Vercel secret generator](https://generate-secret.vercel.app/32)
 - Find the `HTTP_ROUTE` under Events.
 - In Google Console add new Authorized Redirect Url: `http://localhost:3000/api/auth/callback/google`
