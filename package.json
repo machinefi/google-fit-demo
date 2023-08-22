@@ -1,0 +1,8 @@
+{
+  "name": "root",
+  "workspaces": [
+    "adapter",
+    "applet",
+    "blockchain"
+  ]
+}
