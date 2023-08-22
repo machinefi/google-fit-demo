@@ -55,6 +55,15 @@ contract DeviceBinding is Ownable {
         deviceRegistry = DeviceRegistry(_deviceRegistryAddress);
     }
 
+    function bindDevices(
+        bytes32[] memory _deviceIds,
+        address _ownerAddress
+    ) public onlyOwner {
+        for (uint256 i = 0; i < _deviceIds.length; i++) {
+            bindDevice(_deviceIds[i], _ownerAddress);
+        }
+    }
+
     function bindDevice(
         bytes32 _deviceId,
         address _ownerAddress

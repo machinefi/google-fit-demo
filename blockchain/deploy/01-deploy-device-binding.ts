@@ -1,6 +1,7 @@
 import { DeployFunction } from "hardhat-deploy/types";
-import { updateContractMonitor } from "../utils/update-monitor";
-import { addEnvVarToWSProjectConfig } from "../utils/update-envs";
+
+import { OWNERSHIP_ASSIGNED_BYTES32_ADDRESS } from "../constants";
+import { logDeploymendBlock, updateWsConfig } from "../utils/deploy-helpers";
 
 const func: DeployFunction = async ({
   getNamedAccounts,
@@ -18,23 +19,8 @@ const func: DeployFunction = async ({
     log: true,
   });
 
-  console.log("DeviceBinding deployed at block: ", tx.receipt?.blockNumber);
-
-  if (chainId !== "31337") {
-    updateContractMonitor({
-      eventType: "ON_DEVICE_BOUND",
-      chainID: Number(chainId),
-      contractAddress: tx.address,
-      blockStart: tx.receipt?.blockNumber || 20400000,
-      blockEnd: 0,
-      topic0:
-        "0x79e9049c280370b9eda34d20f57456b7dcc94e83ac839777f71209901f780f48",
-    });
-    addEnvVarToWSProjectConfig({
-      envName: "CHAIN_ID",
-      envValue: chainId,
-    });
-  }
+  logDeploymendBlock("DeviceBinding", tx);
+  updateWsConfig(chainId, tx, "ON_DEVICE_BOUND", OWNERSHIP_ASSIGNED_BYTES32_ADDRESS);
 };
 
 export default func;

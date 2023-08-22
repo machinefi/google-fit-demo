@@ -1,5 +1,6 @@
 import { DeployFunction } from "hardhat-deploy/types";
-import { addEnvVarToWSProjectConfig } from "../utils/update-envs";
+
+import { logDeploymendBlock, updateWsConfigEnv } from "../utils/deploy-helpers";
 
 const func: DeployFunction = async ({
   getNamedAccounts,
@@ -10,29 +11,23 @@ const func: DeployFunction = async ({
   const chainId = await getChainId();
   const { deployer } = await getNamedAccounts();
 
-  const REWARDS_CONTRACT_NAME =
-    process.env.REWARDS_CONTRACT_NAME || "Device Rewards";
-  const REWARDS_URI = process.env.REWARDS_URI || "";
+  const { uri, name } = getContractMeta();
 
   const tx = await deploy("DeviceRewards", {
     from: deployer,
-    args: [REWARDS_URI, REWARDS_CONTRACT_NAME],
+    args: [uri, name],
     log: true,
   });
 
-  console.log("DeviceRewards deployed at block: ", tx.receipt?.blockNumber);
-
-  if (chainId !== "31337") {
-    addEnvVarToWSProjectConfig({
-      envName: "REWARDS_CONTRACT_ADDRESS",
-      envValue: tx.address,
-    });
-    addEnvVarToWSProjectConfig({
-      envName: "CHAIN_ID",
-      envValue: chainId,
-    });
-  }
+  logDeploymendBlock("DeviceRewards", tx);
+  updateWsConfigEnv(chainId, tx, "REWARDS_CONTRACT_ADDRESS");
 };
 
 export default func;
 func.tags = ["DeviceRewards"];
+
+function getContractMeta() {
+  const name = process.env.REWARDS_CONTRACT_NAME || "Device Rewards";
+  const uri = process.env.REWARDS_URI || "";
+  return { uri, name };
+}

@@ -1,95 +1,104 @@
-import { ethers } from "hardhat";
+import { ethers, deployments } from "hardhat";
 import { expect } from "chai";
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
+import { Signer } from "ethers"
 
 import { DeviceRewards } from "../typechain-types";
-import { REWARDS_CONTRACT_NAME } from "./fixtures";
 
-const TIER_1_URI =
-  "ipfs://QmQr1X5o4Jhdeb6BMviYN5anHMCjeMHxQPcu45YpN8SfQD/{id}.json";
+const REWARDS_CONTRACT_NAME = process.env.REWARDS_CONTRACT_NAME || "Device Rewards";
+const REWARDS_URI = process.env.REWARDS_URI || "";
 
-const TIER_1_ID = 0;
+const ID_ZERO = 0;
+const ZERO_BYTES = Buffer.from("");
+
+describe("DeviceRewards", function () {
+  let [_, minter, uriSetter, alice]: Signer[] = [];
+  let aliceAddr: string;
+  let rewards: DeviceRewards;
+
+  before(async function () {
+    [_, minter, uriSetter, alice] = await ethers.getSigners();
+    aliceAddr = await alice.getAddress();
+  });
+
+  beforeEach(async function () {
+    rewards = await setup();
+    await grantMinterRole(rewards, minter);
+    await grantUriSetterRole(rewards, uriSetter);
+  });
+  it("Should deploy DeviceRewards", async function () {
+    const actualRewardsAddr = await rewards.getAddress()
+    const actualName = await rewards.name()
+    const actualUri = await rewards.uri(ID_ZERO);
+
+    expect(actualRewardsAddr).to.not.equal(ethers.ZeroAddress);
+    expect(actualName).to.equal(REWARDS_CONTRACT_NAME);
+    expect(actualUri).to.equal(REWARDS_URI);
+  });
+  it("Uri setter should set token uri", async function () {
+    const newUri = "newUri";
+    await rewards.connect(uriSetter).setURI(newUri);
+
+    expect(await rewards.uri(ID_ZERO)).to.equal(newUri);
+  });
+  it("Minter should be able to mint one token to a user", async function () {
+    const amount = 1;
+    await rewards.connect(minter).mint(aliceAddr, ID_ZERO, amount, ZERO_BYTES);
+    expect(await rewards.balanceOf(aliceAddr, ID_ZERO)).to.equal(amount);
+  });
+  it("Minter should be able to mint multiple tokens to a user", async function () {
+    const amount = 2;
+    await rewards.connect(minter).mint(aliceAddr, ID_ZERO, amount, ZERO_BYTES);
+    expect(await rewards.balanceOf(aliceAddr, ID_ZERO)).to.equal(amount);
+  });
+  it("Minter should be able to approve a user to mint token of a tier", async function () {
+    const amount = 1;
+    await rewards.connect(minter).approve(aliceAddr, ID_ZERO, amount);
+    expect(await rewards.allowance(ID_ZERO, aliceAddr)).to.equal(amount);
+  });
+  it("Minter should be able to approve a user to mint multiple tokens of a tier", async function () {
+    const amount = 2;
+    await rewards.connect(minter).approve(aliceAddr, ID_ZERO, amount);
+    expect(await rewards.allowance(ID_ZERO, aliceAddr)).to.equal(amount);
+  });
+  it("Minter should be able to approve a user to mint token of a tier multiple times", async function () {
+    const amount1 = 1;
+    const amount2 = 2;
+    const totalAmount = amount1 + amount2;
+
+    await rewards.connect(minter).approve(aliceAddr, ID_ZERO, amount1);
+    await rewards.connect(minter).approve(aliceAddr, ID_ZERO, amount2);
+    expect(await rewards.allowance(ID_ZERO, aliceAddr)).to.equal(totalAmount);
+  });
+  it("User cannot set allowance", async function () {
+    const minterRole = await rewards.MINTER_ROLE();
+    await expect(rewards.connect(alice).approve(aliceAddr, ID_ZERO, 1)).to
+      .be.revertedWith(
+        `AccessControl: account ${aliceAddr.toLowerCase()} is missing role ${minterRole}`
+      );
+  });
+  it("User should be able to mint a token of a tier", async function () {
+    const amount = 1;
+    await rewards.connect(minter).approve(aliceAddr, ID_ZERO, amount);
+    await rewards.connect(alice).mintFromAllowance(ID_ZERO, ZERO_BYTES);
+    expect(await rewards.balanceOf(aliceAddr, ID_ZERO)).to.equal(amount);
+    expect(await rewards.allowance(ID_ZERO, aliceAddr)).to.equal(0);
+  });
+});
 
 async function setup() {
-  const rewards = await ethers.getContractFactory("DeviceRewards");
-  const rewardsInstance = await rewards.deploy(
-    TIER_1_URI,
-    REWARDS_CONTRACT_NAME
-  );
-  await rewardsInstance.deployed();
-
-  const contracts = {
-    DeviceRewards: rewardsInstance as DeviceRewards,
-  };
-
-  return {
-    ...contracts,
-  };
+  await deployments.fixture(["DeviceRewards"])
+  return ethers.getContract("DeviceRewards") as unknown as DeviceRewards;
 }
 
 async function grantMinterRole(
   rewards: DeviceRewards,
-  minter: SignerWithAddress
+  minter: Signer
 ) {
   const minterRole = await rewards.MINTER_ROLE();
-  await rewards.grantRole(minterRole, minter.address);
+  await rewards.grantRole(minterRole, await minter.getAddress());
 }
 
-describe("DeviceRewards", function () {
-  let [admin, user, badGuy, minter, uriSetter]: SignerWithAddress[] = [];
-  let rewards: DeviceRewards;
-  before(async function () {
-    [admin, user, badGuy, minter, uriSetter] = await ethers.getSigners();
-  });
-  beforeEach(async function () {
-    const { DeviceRewards } = await setup();
-    rewards = DeviceRewards;
-    await grantMinterRole(rewards, minter);
-  });
-  it("Should deploy DeviceRewards", async function () {
-    expect(rewards.address).to.not.equal(0);
-    expect(await rewards.name()).to.equal(REWARDS_CONTRACT_NAME);
-  });
-  it("Should initialize with an uri", async function () {
-    expect(await rewards.uri(TIER_1_ID)).to.equal(TIER_1_URI);
-  });
-  it("Uri setter should set token uri", async function () {
-    const uriSetterRole = await rewards.URI_SETTER_ROLE();
-    await rewards.grantRole(uriSetterRole, uriSetter.address);
-
-    await rewards.connect(uriSetter).setURI(TIER_1_URI + "2");
-
-    expect(await rewards.uri(TIER_1_ID)).to.equal(TIER_1_URI + "2");
-  });
-  it("Minter should be able to mint one token to a user", async function () {
-    await rewards.connect(minter).mint(user.address, TIER_1_ID, 1, []);
-    expect(await rewards.balanceOf(user.address, TIER_1_ID)).to.equal(1);
-  });
-  it("Minter should be able to mint multiple tokens to a user", async function () {
-    await rewards.connect(minter).mint(user.address, TIER_1_ID, 2, []);
-    expect(await rewards.balanceOf(user.address, TIER_1_ID)).to.equal(2);
-  });
-  it("Minter should be able to approve a user to mint token of a tier", async function () {
-    await rewards.connect(minter).approve(user.address, TIER_1_ID, 1);
-    expect(await rewards.allowance(TIER_1_ID, user.address)).to.equal(1);
-  });
-  it("Minter should be able to approve a user to mint multiple tokens of a tier", async function () {
-    await rewards.connect(minter).approve(user.address, TIER_1_ID, 2);
-    expect(await rewards.allowance(TIER_1_ID, user.address)).to.equal(2);
-  });
-  it("Minter should be able to approve a user to mint token of a tier multiple times", async function () {
-    await rewards.connect(minter).approve(user.address, TIER_1_ID, 1);
-    await rewards.connect(minter).approve(user.address, TIER_1_ID, 2);
-    expect(await rewards.allowance(TIER_1_ID, user.address)).to.equal(3);
-  });
-  it("User cannot set allowance", async function () {
-    await expect(rewards.connect(user).approve(user.address, TIER_1_ID, 1)).to
-      .be.reverted;
-  });
-  it("User should be able to mint a token of a tier", async function () {
-    await rewards.connect(minter).approve(user.address, TIER_1_ID, 1);
-    await rewards.connect(user).mintFromAllowance(TIER_1_ID, []);
-    expect(await rewards.balanceOf(user.address, TIER_1_ID)).to.equal(1);
-    expect(await rewards.allowance(TIER_1_ID, user.address)).to.equal(0);
-  });
-});
+async function grantUriSetterRole(rewards: DeviceRewards, uriSetter: Signer) {
+  const uriSetterRole = await rewards.URI_SETTER_ROLE();
+  await rewards.grantRole(uriSetterRole, await uriSetter.getAddress());
+}
