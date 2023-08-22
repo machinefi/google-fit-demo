@@ -12,39 +12,39 @@ export const bindingContract = getContract({
   abi: bindingConfig.abi,
 });
 
-export async function bindDevice(deviceId: string, ownerAddr: string) {
-  const bindingState = await getBindingState(deviceId);
+const ZERO_ADDR = "0x0000000000000000000000000000000000000000";
 
-  if (bindingState === ownerAddr) {
-    return { transactionHash: "already bound" };
-  }
-  if (bindingState != "0x0000000000000000000000000000000000000000" && !!bindingState) {
-    throw new Error("Device already bound to another address");
-  }
+export async function bindDevice(deviceIds: string[], ownerAddr: string) {
+  const bindingStates = await getBindingStates(deviceIds);
+
+  const devicesToBind = deviceIds.filter((_, index) => !bindingStates[index]);
 
   const { request } = await publicClient.simulateContract({
     account: walletClient.account,
     address: bindingConfig.address as `0x${string}`,
     abi: bindingConfig.abi,
-    functionName: "bindDevice",
-    args: [deviceId, ownerAddr],
+    functionName: "bindDevices",
+    args: [devicesToBind, ownerAddr],
   });
   const hash = await walletClient.writeContract(request);
   return publicClient.waitForTransactionReceipt({ hash, confirmations: 1 });
 }
 
-async function getBindingState(deviceId: string) {
+async function getBindingStates(deviceIds: string[]): Promise<boolean[]> {
+  const bindingStates = await Promise.all(deviceIds.map(getBindingState));
+  return bindingStates.map((state) => state != ZERO_ADDR);
+}
+
+async function getBindingState(deviceId: string): Promise<string> {
   try {
-    const deviceOwner = await publicClient.readContract({
+    return publicClient.readContract({
       address: bindingConfig.address as `0x${string}`,
       abi: bindingConfig.abi,
       functionName: "getDeviceOwner",
       args: [deviceId],
-    }) as unknown as string | undefined | null;
-  
-    return deviceOwner;
+    }) as unknown as string;
   } catch (e) {
     console.log(e);
-    return undefined;
+    throw new Error("Failed to check if device is bound");
   }
 }

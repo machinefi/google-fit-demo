@@ -35,8 +35,8 @@ export async function POST(req: NextRequest) {
 
 async function registerOnChain(deviceId: string, ownerAddr: string) {
   try {
-    const registerTx = await registerDevice(`0x${deviceId}`);
-    const bindTx = await bindDevice(`0x${deviceId}`, ownerAddr);
+    const registerTx = await registerDevice([`0x${deviceId}`]);
+    const bindTx = await bindDevice([`0x${deviceId}`], ownerAddr);
     return {
       registerTx: registerTx.transactionHash,
       bindTx: bindTx.transactionHash,
