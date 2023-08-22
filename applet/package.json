@@ -13,7 +13,7 @@
   "license": "ISC",
   "devDependencies": {
     "@as-pect/cli": "^8.1.0",
-    "@w3bstream/wasm-sdk": "^0.6.1",
+    "@w3bstream/wasm-sdk": "^0.7.0",
     "assemblyscript": "^0.27.0"
   },
   "type": "module",
@@ -26,5 +26,13 @@
   "directories": {
     "test": "tests"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/machinefi/google-fit-demo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/machinefi/google-fit-demo/issues"
+  },
+  "homepage": "https://github.com/machinefi/google-fit-demo#readme",
   "description": ""
 }
