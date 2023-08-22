@@ -23,12 +23,14 @@ To get access to the Fitness REST API we will need to create an OAuth Client. Fo
 
 ### NFT URI
 
+> This step is optional, you can use the provided NFTs URIs, but if you want to use your own, please follow the instructions below.
+
 > You will need to upload one image and one metadata JSON file for the ERC721 Device SBT.
 > For the ERC1155 Rewards - one image along with its corresponding metadata JSON file to represent the Rewards for completed training sessions.
 
 Upload your NFT images and the corresponding metadata to a file storage of your choice or use a script in `nft` directory that will upload files to [Arweave](https://www.arweave.org) via [Bundlr](https://bundlr.network):
 
-- After cloning the repo navigate to `nft` directory and run `npm i`
+- Navigate to `nft` directory and run `npm i`
 - In `assets` subdir you can find images for SBT and Rewards NFTs. _You can update images with your own, but don't forget to update config file in `src/config`_
 - Create `.env` file and add your `PRIVATE_KEY` _(The account will be used to pay Bundlr fees with testnet tokens, please make sure to top up the corresponding account with some Matic tokens, [link to faucet](https://mumbaifaucet.com))_
 - Run `npm run upload`
@@ -42,7 +44,7 @@ Follow the steps below to set up and run the project.
 ### Step 1: Repository Cloning and Dependency Installation
 
 - Begin by clicking "use this template" which houses three directories: `adapter`, `applet` and `blockchain`.
-- Install the necessary dependencies in each directory by running `npm i`.
+- Install the necessary dependencies by running `npm i`.
 
 ### Step 2: Blockchain Environment Preparation
 
@@ -73,7 +75,7 @@ Follow the steps below to set up and run the project.
 ### Step 5: Adapter Configuration
 
 - Create a new file named `.env.local` and populate it with the variables from `.env.template`.
-- Navigate to Devices in the studio interface to find the device token and update `DEVICE_TOKEN`.
+- Navigate to Account Settings in the studio interface to create an API key with `Publisher` read and write persmisisons and update `API_TOKEN`.
 - `NEXTAUTH_SECRET` can be aquired in [Vercel secret generator](https://generate-secret.vercel.app/32)
 - Find the `HTTP_ROUTE` under Events.
 - In Google Console add new Authorized Redirect Url: `http://localhost:3000/api/auth/callback/google`
