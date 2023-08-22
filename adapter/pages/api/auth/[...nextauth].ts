@@ -9,7 +9,7 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_SECRET || "",
       authorization: {
         params: {
-          scope: "openid email profile https://www.googleapis.com/auth/fitness.activity.read",
+          scope: "openid email profile https://www.googleapis.com/auth/fitness.activity.read https://www.googleapis.com/auth/fitness.activity.write",
         },
       },
     }),
