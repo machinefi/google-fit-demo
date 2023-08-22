@@ -14,6 +14,8 @@ task(
     deployer
   );
 
+  console.log("Granting minter role to", process.env.OPERATOR_ADDRESS);
+
   const minterRole = await rewards.MINTER_ROLE();
   const tx = await rewards.grantRole(minterRole, process.env.OPERATOR_ADDRESS);
   await tx.wait();

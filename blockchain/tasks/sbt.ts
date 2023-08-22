@@ -12,6 +12,8 @@ task("grant-sbt-minter", "Grant sbt minter role to an address").setAction(
       deployer
     );
 
+    console.log("Granting minter role to", process.env.OPERATOR_ADDRESS)
+
     const minterRole = await sbt.MINTER_ROLE();
     const tx = await sbt.grantRole(minterRole, process.env.OPERATOR_ADDRESS);
     await tx.wait();
