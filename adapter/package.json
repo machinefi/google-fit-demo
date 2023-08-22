@@ -9,24 +9,39 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@types/node": "20.1.7",
-    "@types/react": "18.2.6",
-    "@types/react-dom": "18.2.4",
-    "autoprefixer": "10.4.14",
+    "autoprefixer": "^10.4.14",
     "axios": "^1.4.0",
     "client-only": "^0.0.1",
-    "eslint": "8.40.0",
-    "eslint-config-next": "13.4.2",
     "ioredis": "^5.3.2",
-    "next": "13.4.2",
+    "next": "^13.4.2",
     "next-auth": "^4.22.1",
-    "postcss": "8.4.23",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "postcss": "^8.4.23",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "server-only": "^0.0.1",
-    "tailwindcss": "3.3.2",
-    "typescript": "5.0.4",
-    "viem": "^0.3.30",
+    "tailwindcss": "^3.3.2",
+    "viem": "^1.6.4",
+    "w3bstream-client-js": "^3.0.0",
     "wagmi": "^1.0.5"
-  }
+  },
+  "devDependencies": {
+    "@types/node": "^20.1.7",
+    "@types/react": "^18.2.6",
+    "@types/react-dom": "^18.2.4",
+    "eslint": "^8.40.0",
+    "eslint-config-next": "^13.4.2",
+    "typescript": "^5.0.4"
+  },
+  "description": "This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).",
+  "main": "next.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/machinefi/google-fit-demo.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/machinefi/google-fit-demo/issues"
+  },
+  "homepage": "https://github.com/machinefi/google-fit-demo#readme"
 }
