@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import Wallet from "../components/Wallet";
 import { ClaimSBTButton } from "./ClaimSBTButton";
 import { useDeviceIds } from "@/hooks/useDeviceIds";
@@ -12,7 +13,7 @@ export default function Devices() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4">
+    <div className="flex flex-col items-center gap-8">
       {devices.map((device) => (
         <div
           key={device}
@@ -24,6 +25,9 @@ export default function Devices() {
           </Wallet>
         </div>
       ))}
+      <Link href="/syncdata">
+        <button className="btn-outline-primary">Sync device data</button>
+      </Link>
     </div>
   );
 }
@@ -31,10 +35,8 @@ export default function Devices() {
 const EmptyDevicesList = () => (
   <div className="flex flex-col items-center justify-center gap-4">
     <p className="text-white">No devices registered yet.</p>
-    <a href="/register">
-      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        Register Device
-      </button>
-    </a>
+    <Link href="/register">
+      <button className="btn-outline-primary">Register device</button>
+    </Link>
   </div>
 );

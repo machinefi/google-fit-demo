@@ -1,22 +1,24 @@
-import { useAccount, useConnect } from "wagmi";
+import { useAccount, useConnect, useNetwork, useSwitchNetwork } from "wagmi";
+import { iotexTestnet } from "wagmi/chains";
 
 export const ConnectButton = ({ children }: { children: React.ReactNode }) => {
   const { isConnected } = useAccount();
+  const { chain } = useNetwork();
 
-  return (
-    <>
-      {isConnected ? (
-        <div className="flex flex-col gap-4">{children}</div>
-      ) : (
-        <ConnectHanlder />
-      )}
-    </>
-  );
+  if (!isConnected || !chain?.id) {
+    return <ConnectHandler />;
+  }
+
+  if (chain.unsupported || chain.id !== iotexTestnet.id) {
+    return <SwitchHandler />;
+  }
+
+  return <>{children}</>;
 };
 
 export default ConnectButton;
 
-const ConnectHanlder = () => {
+const ConnectHandler = () => {
   const { connect, connectors, error, isLoading, pendingConnector } =
     useConnect();
 
@@ -43,6 +45,25 @@ const ConnectHanlder = () => {
             " (connecting)"}
         </button>
       ))}
+    </div>
+  );
+};
+
+const SwitchHandler = () => {
+  const { isLoading, pendingChainId, switchNetwork } = useSwitchNetwork();
+
+  return (
+    <div className="flex flex-col gap-2 items-center">
+      Switch to a supported network:
+      <button
+        disabled={!switchNetwork || isLoading}
+        key={iotexTestnet.id}
+        onClick={() => switchNetwork?.(iotexTestnet.id)}
+        className="btn-primary w-full"
+      >
+        {iotexTestnet.name}
+        {isLoading && pendingChainId === iotexTestnet.id && " (switching)"}
+      </button>
     </div>
   );
 };

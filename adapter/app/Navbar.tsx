@@ -1,7 +1,8 @@
+import Link from "next/link";
+
 const navItems = [
   { name: "Home", path: "/" },
   { name: "Register", path: "/register" },
-  { name: "Dashboard", path: "/dashboard" },
   { name: "My Devices", path: "/sbt" },
   { name: "Sync Data", path: "/syncdata" },
   { name: "Collect", path: "/rewards" },
@@ -9,19 +10,24 @@ const navItems = [
 
 export const Navbar = () => {
   return (
-    <nav className="flex items-center  flex-wrap bg-transparent p-6">
+    <nav className="flex items-center flex-wrap gap-4 bg-transparent p-6">
       {navItems.map((item) => (
-        <div
-          key={item.name}
-          className="flex items-center flex-shrink-0 text-white text-opacity-50 mr-6"
-        >
-          <a href={item.path}>
-            <span className="font-semibold text-xl tracking-tight">
-              {item.name}
-            </span>
-          </a>
-        </div>
+        <NavItem name={item.name} path={item.path} key={item.path} />
       ))}
     </nav>
+  );
+};
+
+const NavItem = ({ name, path }: { name: string; path: string }) => {
+  return (
+    <div className="group">
+      <Link
+        href={path}
+        className="text-neutral-400 transition-colors duration-300 group-hover:text-primary-50"
+      >
+        <span className="text-xl tracking-tight">{name}</span>
+      </Link>
+      <div className="mx-2 mt-2 duration-300 border-b-2 opacity-0 border-white group-hover:opacity-50"></div>
+    </div>
   );
 };
