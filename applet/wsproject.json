@@ -242,7 +242,7 @@
       ],
       [
         "EVALUATION_PERIOD_DAYS",
-        "1"
+        "30"
       ],
       [
         "SESSION_DURATION_MILLIS",
