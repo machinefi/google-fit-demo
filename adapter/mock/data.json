@@ -1,11 +1,9 @@
-[
-    {
-        "id": "1",
-        "name": "Yoga",
-        "description": "",
-        "startTimeMillis": "1692673200000",
-        "endTimeMillis": "1692676800000",
-        "modifiedTimeMillis": "1692676800000",
-        "activityType": 100
-    }
-]
+{
+    "id": "1",
+    "name": "Yoga",
+    "description": "",
+    "startTimeMillis": "1692673200000",
+    "endTimeMillis": "1692676800000",
+    "modifiedTimeMillis": "1692676800000",
+    "activityType": 100
+}
