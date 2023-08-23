@@ -24,16 +24,21 @@ export const CollectButton = ({ tier }: { tier: number }) => {
   });
 
   return (
-    <div>
+    <div className="flex flex-col items-center gap-2">
       <button
+        className="btn-outline-primary"
         disabled={!write || isLoading || isWaiting}
         onClick={() => write?.()}
       >
-        Collect
+        {isLoading && <div>Check Wallet</div>}
+        {isWaiting && <div>Collecting...</div>}
+        {!isLoading && !isWaiting && <div>Collect</div>}
       </button>
-      {isLoading && <div>Check Wallet</div>}
-      {isWaiting && <div>Collecting...</div>}
-      {isSuccess && <div>Transaction: {JSON.stringify(data)}</div>}
+      {isSuccess && (
+        <div className="text-secondary-500">
+          Transaction: {JSON.stringify(data)}
+        </div>
+      )}
     </div>
   );
 };

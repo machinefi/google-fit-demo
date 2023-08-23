@@ -23,16 +23,21 @@ export const ClaimSBTButton = ({ deviceId }: { deviceId: string }) => {
   });
 
   return (
-    <div>
+    <div className="flex flex-col items-center gap-2">
       <button
+        className="btn-outline-primary"
         disabled={!write || isLoading || isWaiting}
         onClick={() => write?.()}
       >
-        Claim SBT
+        {isLoading && <div>Check Wallet</div>}
+        {isWaiting && <div>Claiming...</div>}
+        {!isLoading && !isWaiting && <div>Claim SBT</div>}
       </button>
-      {isLoading && <div>Check Wallet</div>}
-      {isWaiting && <div>Claiming...</div>}
-      {isSuccess && <div>Transaction: {JSON.stringify(data)}</div>}
+      {isSuccess && (
+        <div className="text-secondary-500">
+          Transaction: {JSON.stringify(data)}
+        </div>
+      )}
     </div>
   );
 };

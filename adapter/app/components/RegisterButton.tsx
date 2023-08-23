@@ -1,22 +1,37 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useAccount } from "wagmi";
 import axios from "axios";
 
 import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { useTimer } from "@/hooks/useTimer";
 
 export const RegisterButton = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
+  const { timeLeft, reset, tick, started, start, stop } = useTimer(30);
   const { address: ownerAddr, isDisconnected } = useAccount();
 
   const { data: session } = useSession();
 
+  const countDown = useRef<NodeJS.Timeout>();
+
   const handleClick = async () => {
-    setLoading(true);
+    setTimeout(() => {
+      setLoading(true);
+    }, 500);
+
+    setTimeout(() => {
+      start();
+      countDown.current = setInterval(() => {
+        tick();
+      }, 1000);
+    }, 2000);
+
     try {
       const res = await axios.post("/api/register", {
         ownerEmail: session?.user?.email,
@@ -30,32 +45,28 @@ export const RegisterButton = () => {
       setError(e.response.data.error || e.message);
     } finally {
       setLoading(false);
+      clearInterval(countDown.current!);
+      stop();
+      reset();
     }
   };
 
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center gap-4">
-        <button
-          onClick={() => setError("")}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Try Again
-        </button>
-        <p className="text-red-500">{error}</p>
-      </div>
+      <button
+        onClick={() => setError("")}
+        className="btn-outline-secondary w-1/3"
+      >
+        Failed to register. Try again.
+      </button>
     );
   }
 
   if (success) {
     return (
-      <div className="flex flex-col items-center justify-evenly gap-4">
-        <a href="/dashboard">
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            Go to Dashboard
-          </button>
-        </a>
-      </div>
+      <Link href="/sbt" className="flex flex-col w-1/3">
+        <button className="btn-primary">See devices</button>
+      </Link>
     );
   }
 
@@ -63,10 +74,11 @@ export const RegisterButton = () => {
     <button
       disabled={isDisconnected || loading || success || !session?.user?.email}
       onClick={handleClick}
-      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:bg-gray-700 disabled:text-gray-400 disabled:cursor-not-allowed"
+      className="btn-outline-primary"
     >
       {isDisconnected && "Connect Wallet"}
       {loading && "Loading..."}
+      {started && timeLeft > 0 && `${timeLeft}s`}
       {success && "Success!"}
       {!isDisconnected && !loading && !success && "Register"}
     </button>
@@ -74,8 +86,5 @@ export const RegisterButton = () => {
 };
 
 const updateDevicesInLocalStorage = (emailHashed: string) => {
-  const storedDevices = localStorage.getItem("devices");
-  const parsedDevices = JSON.parse(storedDevices || "[]") as string[];
-  const newDevices = [emailHashed, ...parsedDevices];
-  localStorage.setItem("devices", JSON.stringify(newDevices));
+  localStorage.setItem("devices", JSON.stringify([emailHashed]));
 };

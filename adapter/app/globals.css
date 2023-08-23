@@ -14,7 +14,60 @@
   margin: 0;
 }
 
+html,
 body {
-  color: rgb(var(--foreground-rgb));
-  background: #0f0f0f;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+body {
+  background: #0f0c29; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #24243e,
+    #302b63,
+    #0f0c29
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #24243e,
+    #302b63,
+    #0f0c29
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+@layer base {
+  body {
+    @apply text-neutral-200;
+  }
+  a {
+    @apply text-primary-300 hover:text-primary-50;
+  }
+  h1 {
+    @apply text-4xl font-bold tracking-wider;
+  }
+  input {
+    @apply w-full border rounded-lg p-2 px-4 bg-transparent 
+      placeholder:text-center text-center md:placeholder:text-left md:text-left
+      border-neutral-500 text-gray-100 focus:outline-none 
+      focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply py-2 px-4 rounded-lg bg-primary-500 text-black
+      transition duration-300 hover:bg-primary-600 
+      disabled:hover:bg-transparent disabled:hover:text-primary-500 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-outline-primary {
+    @apply py-2 px-4 rounded-lg border border-primary-500 text-primary-500 
+      transition duration-300 hover:bg-primary-500 hover:text-black
+      disabled:hover:bg-transparent disabled:hover:text-primary-500 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-outline-secondary {
+    @apply py-2 px-4 rounded-lg border border-secondary-500
+      text-secondary-400 transition duration-300 hover:bg-secondary-500 hover:text-white;
+  }
 }

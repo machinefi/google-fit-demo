@@ -2,6 +2,7 @@
 
 import { useDeviceIds } from "@/hooks/useDeviceIds";
 import axios from "axios";
+import Link from "next/link";
 import { useState } from "react";
 
 export const SyncButton = () => {
@@ -11,7 +12,10 @@ export const SyncButton = () => {
   const devices = useDeviceIds();
 
   const handleClick = async () => {
-    setLoading(true);
+    setTimeout(() => {
+      setLoading(true);
+    }, 500);
+
     try {
       await axios.post("/api/pull-data", { deviceId: devices[0] });
       await axios.post("/api/evaluate");
@@ -28,37 +32,27 @@ export const SyncButton = () => {
     return (
       <div className="flex flex-col items-center justify-center gap-4">
         <p className="text-red-500">No devices registered yet.</p>
-        <a href="/register">
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            Register device
-          </button>
-        </a>
+        <Link href="/register">
+          <button className="btn-outline-primary">Register device</button>
+        </Link>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center gap-4">
-        <button
-          onClick={() => setError("")}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Try Again
-        </button>
-        <p className="text-red-500">{error}</p>
-      </div>
+      <button onClick={() => setError("")} className="btn-outline-secondary">
+        Sync failed. Try again.
+      </button>
     );
   }
 
   if (success) {
     return (
       <div className="flex flex-col items-center justify-evenly gap-4">
-        <a href="/dashboard">
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            Go to Dashboard and try to collect your NFTs
-          </button>
-        </a>
+        <Link href="/rewards">
+          <button className="btn-primary">Go to Rewards</button>
+        </Link>
         <button
           onClick={() => setSuccess(false)}
           className="bg-transparent hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
@@ -75,7 +69,9 @@ export const SyncButton = () => {
       disabled={loading || success}
       onClick={handleClick}
     >
-      Sync Data
+      {loading && "Loading..."}
+      {success && "Success!"}
+      {!loading && !success && "Start sync"}
     </button>
   );
 };
