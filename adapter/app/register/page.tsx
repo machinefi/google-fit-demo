@@ -13,7 +13,7 @@ export default function RegisterPage() {
           ownership of the devices <br />
         </p>
       </div>
-      <div className="flex flex-col gap-2 w-1/2">
+      <div className="flex flex-col items-center gap-2 w-1/2">
         <Wallet>
           <RegisterButton />
         </Wallet>

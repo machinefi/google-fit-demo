@@ -18,7 +18,7 @@ export const CollectButton = ({ tier }: { tier: number }) => {
 
   const { data, isLoading, isSuccess, write } = useContractWrite(config);
 
-  const { isLoading: isWaiting } = useWaitForTransaction({
+  const { isLoading: isWaiting, isSuccess: waitSuccess } = useWaitForTransaction({
     hash: data?.hash,
     confirmations: 1,
   });
@@ -32,7 +32,8 @@ export const CollectButton = ({ tier }: { tier: number }) => {
       >
         {isLoading && <div>Check Wallet</div>}
         {isWaiting && <div>Collecting...</div>}
-        {!isLoading && !isWaiting && <div>Collect</div>}
+        {waitSuccess && <div>Collected</div>}
+        {!isLoading && !isWaiting && !waitSuccess && <div>Collect</div>}
       </button>
       {isSuccess && (
         <div className="text-secondary-500">

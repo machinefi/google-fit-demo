@@ -17,21 +17,23 @@ export const ClaimSBTButton = ({ deviceId }: { deviceId: string }) => {
   });
   const { data, isLoading, isSuccess, write } = useContractWrite({ ...config });
 
-  const { isLoading: isWaiting } = useWaitForTransaction({
-    hash: data?.hash,
-    confirmations: 1,
-  });
+  const { isLoading: isWaiting, isSuccess: waitSuccess } =
+    useWaitForTransaction({
+      hash: data?.hash,
+      confirmations: 1,
+    });
 
   return (
     <div className="flex flex-col items-center gap-2">
       <button
         className="btn-outline-primary"
-        disabled={!write || isLoading || isWaiting}
+        disabled={!write || isLoading || isWaiting || isSuccess}
         onClick={() => write?.()}
       >
         {isLoading && <div>Check Wallet</div>}
         {isWaiting && <div>Claiming...</div>}
-        {!isLoading && !isWaiting && <div>Claim SBT</div>}
+        {waitSuccess && <div>Claimed</div>}
+        {!isLoading && !isWaiting && !waitSuccess && <div>Claim SBT</div>}
       </button>
       {isSuccess && (
         <div className="text-secondary-500">

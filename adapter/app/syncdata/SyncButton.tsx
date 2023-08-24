@@ -55,7 +55,7 @@ export const SyncButton = () => {
         </Link>
         <button
           onClick={() => setSuccess(false)}
-          className="bg-transparent hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="btn-outline-secondary"
         >
           Sync Another
         </button>
@@ -65,7 +65,7 @@ export const SyncButton = () => {
 
   return (
     <button
-      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      className="btn-outline-primary"
       disabled={loading || success}
       onClick={handleClick}
     >
