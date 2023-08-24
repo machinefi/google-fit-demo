@@ -1,5 +1,6 @@
 import "server-only";
 
+// @ts-ignore
 import { getContract } from "viem";
 
 import * as deployments from "../../contracts/deployments.json";
